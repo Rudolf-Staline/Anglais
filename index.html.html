@@ -48,6 +48,32 @@
             padding: 2rem;
             text-align: center;
         }
+        .bg-video-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+         }
+
+        .bg-video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        transform: translate(-50%, -50%) scale(1.1); /* ta mise à l'échelle */
+        object-fit: cover;
+        z-index: -1;
+        }
+
+        .slide-content {
+        position: relative;
+        z-index: 10;
+        color: white;
+        }
+
         
         @media (max-width: 768px) {
             .mobile-warning {
@@ -266,10 +292,12 @@
 
         <!-- Slide 1: Cover -->
         <div class="slide active">
-            <div class="bg-wrapper">
-                <div class="bg-img" style="background-image: url('garde1.jpg'); transform: scale(1.1);"></div>
+            <div class="">
+                <video class="bg-video" autoplay muted loop playsinline>
+                    <source src="background2.mp4" type="video/mp4">
+                </video>            
             </div>
-            <div class="overlay" style="background: radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.95) 100%);"></div>
+            <div class="overlay" style="background: radial-gradient(circle at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.2) 100%);"></div>
             
             <div class="content text-center relative overflow-hidden">
                 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20rem] font-black text-white/5 pointer-events-none z-0 select-none font-jp leading-none">
@@ -501,106 +529,105 @@
         </div>
 
         <!-- Slide 6: Food Gallery -->
-<div class="slide">
+        <div class="slide">
 
-  <div class="bg-wrapper">
-    <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=2187&auto=format&fit=crop'); opacity: 0.3;"></div>
-  </div>
-
-  <div class="overlay" style="background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.95));"></div>
-
-  <div class="content">
-    <div class="w-full max-w-7xl mx-auto">
-      <div class="text-center mb-12 reveal-up">
-        <div class="flex items-center justify-center gap-4 mb-6">
-          <div class="h-[1px] w-16 bg-neon-red"></div>
-          <i class="fa-solid fa-utensils text-4xl text-neon-red"></i>
-          <div class="h-[1px] w-16 bg-neon-red"></div>
-        </div>
-        <h2 class="text-6xl font-bold text-white mb-4 drop-shadow-2xl">Food Gallery</h2>
-        <p class="text-xl text-gray-300 font-mono">The Dishes We Experienced</p>
-      </div>
-
-      <div class="food-grid">
-
-        <div class="food-card reveal-up stagger-1 border border-white/20 hover:border-neon-red transition-all duration-300">
-          <img src="https://images.pexels.com/photos/31317043/pexels-photo-31317043.jpeg" alt="Onigiri">
-          <div class="food-card-overlay">
-            <h3 class="text-2xl font-bold text-white mb-2">🍙 Onigiri</h3>
-            <p class="text-gray-300 text-sm">Rice balls - Perfect breakfast choice</p>
-          </div>
+        <div class="bg-wrapper">
+            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=2187&auto=format&fit=crop'); opacity: 0.3;"></div>
         </div>
 
-        <div class="food-card reveal-up stagger-2 border border-white/20 hover:border-neon-red transition-all duration-300">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Beef_Bowl%2C_Gy%C5%ABdon.jpg" alt="Gyudon">
-          <div class="food-card-overlay">
-            <h3 class="text-2xl font-bold text-white mb-2">🍚 Matsuya Beef Bowl</h3>
-            <p class="text-gray-300 text-sm">Classic gyudon - Affordable & filling</p>
-          </div>
+        <div class="overlay" style="background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.95));"></div>
+
+        <div class="content">
+            <div class="w-full max-w-7xl mx-auto">
+            <div class="text-center mb-12 reveal-up">
+                <div class="flex items-center justify-center gap-4 mb-6">
+                <div class="h-[1px] w-16 bg-neon-red"></div>
+                <i class="fa-solid fa-utensils text-4xl text-neon-red"></i>
+                <div class="h-[1px] w-16 bg-neon-red"></div>
+                </div>
+                <h2 class="text-6xl font-bold text-white mb-4 drop-shadow-2xl">Food Gallery</h2>
+                <p class="text-xl text-gray-300 font-mono">The Dishes We Experienced</p>
+            </div>
+
+            <div class="food-grid">
+
+                <div class="food-card reveal-up stagger-1 border border-white/20 hover:border-neon-red transition-all duration-300">
+                <img src="https://images.pexels.com/photos/31317043/pexels-photo-31317043.jpeg" alt="Onigiri">
+                <div class="food-card-overlay">
+                    <h3 class="text-2xl font-bold text-white mb-2">🍙 Onigiri</h3>
+                    <p class="text-gray-300 text-sm">Rice balls - Perfect breakfast choice</p>
+                </div>
+                </div>
+
+                <div class="food-card reveal-up stagger-2 border border-white/20 hover:border-neon-red transition-all duration-300">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Beef_Bowl%2C_Gy%C5%ABdon.jpg" alt="Gyudon">
+                <div class="food-card-overlay">
+                    <h3 class="text-2xl font-bold text-white mb-2">🍚 Matsuya Beef Bowl</h3>
+                    <p class="text-gray-300 text-sm">Classic gyudon - Affordable & filling</p>
+                </div>
+                </div>
+
+                <div class="food-card reveal-up stagger-3 border border-white/20 hover:border-neon-red transition-all duration-300">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Yakitori_018.jpg" alt="Yakitori">
+                <div class="food-card-overlay">
+                    <h3 class="text-2xl font-bold text-white mb-2">🍢 Yakitori</h3>
+                    <p class="text-gray-300 text-sm">Grilled skewers in Omoide Yokocho</p>
+                </div>
+                </div>
+
+                <div class="food-card reveal-up stagger-1 border border-white/20 hover:border-neon-red transition-all duration-300">
+                <img src="https://images.pexels.com/photos/2098135/pexels-photo-2098135.jpeg" alt="Soba">
+                <div class="food-card-overlay">
+                    <h3 class="text-2xl font-bold text-white mb-2">🍜 Standing Soba</h3>
+                    <p class="text-gray-300 text-sm">Quick buckwheat noodles at stations</p>
+                </div>
+                </div>
+
+                <div class="food-card reveal-up stagger-2 border border-white/20 hover:border-neon-red transition-all duration-300">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Tempura.JPG" alt="Tempura">
+                <div class="food-card-overlay">
+                    <h3 class="text-2xl font-bold text-white mb-2">🍤 Tenya Tempura</h3>
+                    <p class="text-gray-300 text-sm">Crispy fried seafood & vegetables</p>
+                </div>
+                </div>
+
+                <div class="food-card reveal-up stagger-3 border border-white/20 hover:border-neon-red transition-all duration-300">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Gyoza_%288664264357%29.jpg" alt="Gyoza">
+                <div class="food-card-overlay">
+                    <h3 class="text-2xl font-bold text-white mb-2">🥟 Gyoza Set</h3>
+                    <p class="text-gray-300 text-sm">Pan-fried dumplings with dipping sauce</p>
+                </div>
+                </div>
+
+                <div class="food-card reveal-up stagger-4 border border-white/20 hover:border-neon-red transition-all duration-300">
+                <img src="https://images.pexels.com/photos/1683545/pexels-photo-1683545.jpeg" alt="Sushi">
+                <div class="food-card-overlay">
+                    <h3 class="text-2xl font-bold text-white mb-2">🍣 Kura Sushi</h3>
+                    <p class="text-gray-300 text-sm">Conveyor belt sushi experience</p>
+                </div>
+                </div>
+
+                <div class="food-card reveal-up stagger-1 border border-white/20 hover:border-neon-red transition-all duration-300">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/59/Curry_rice_by_Hyougushi_in_Kyoto.jpg" alt="Curry">
+                <div class="food-card-overlay">
+                    <h3 class="text-2xl font-bold text-white mb-2">🍛 Go Go Curry</h3>
+                    <p class="text-gray-300 text-sm">Hearty Japanese curry rice</p>
+                </div>
+                </div>
+
+            </div>
+
+            <div class="mt-12 text-center reveal-up">
+                <div class="inline-block bg-black/60 backdrop-blur-xl border border-neon-red/30 px-8 py-4 rounded-full">
+                <p class="text-gray-300 font-mono text-sm">
+                    <span class="text-neon-red font-bold">8 different dishes</span> across 4 days • Budget: <span class="text-white font-bold">€80 total</span>
+                </p>
+                </div>
+            </div>
+
+            </div>
         </div>
-
-        <div class="food-card reveal-up stagger-3 border border-white/20 hover:border-neon-red transition-all duration-300">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Yakitori_018.jpg" alt="Yakitori">
-          <div class="food-card-overlay">
-            <h3 class="text-2xl font-bold text-white mb-2">🍢 Yakitori</h3>
-            <p class="text-gray-300 text-sm">Grilled skewers in Omoide Yokocho</p>
-          </div>
         </div>
-
-        <div class="food-card reveal-up stagger-1 border border-white/20 hover:border-neon-red transition-all duration-300">
-          <img src="https://images.pexels.com/photos/2098135/pexels-photo-2098135.jpeg" alt="Soba">
-          <div class="food-card-overlay">
-            <h3 class="text-2xl font-bold text-white mb-2">🍜 Standing Soba</h3>
-            <p class="text-gray-300 text-sm">Quick buckwheat noodles at stations</p>
-          </div>
-        </div>
-
-        <div class="food-card reveal-up stagger-2 border border-white/20 hover:border-neon-red transition-all duration-300">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Tempura.JPG" alt="Tempura">
-          <div class="food-card-overlay">
-            <h3 class="text-2xl font-bold text-white mb-2">🍤 Tenya Tempura</h3>
-            <p class="text-gray-300 text-sm">Crispy fried seafood & vegetables</p>
-          </div>
-        </div>
-
-        <div class="food-card reveal-up stagger-3 border border-white/20 hover:border-neon-red transition-all duration-300">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Gyoza_%288664264357%29.jpg" alt="Gyoza">
-          <div class="food-card-overlay">
-            <h3 class="text-2xl font-bold text-white mb-2">🥟 Gyoza Set</h3>
-            <p class="text-gray-300 text-sm">Pan-fried dumplings with dipping sauce</p>
-          </div>
-        </div>
-
-        <div class="food-card reveal-up stagger-4 border border-white/20 hover:border-neon-red transition-all duration-300">
-          <img src="https://images.pexels.com/photos/1683545/pexels-photo-1683545.jpeg" alt="Sushi">
-          <div class="food-card-overlay">
-            <h3 class="text-2xl font-bold text-white mb-2">🍣 Kura Sushi</h3>
-            <p class="text-gray-300 text-sm">Conveyor belt sushi experience</p>
-          </div>
-        </div>
-
-        <div class="food-card reveal-up stagger-1 border border-white/20 hover:border-neon-red transition-all duration-300">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/5/59/Curry_rice_by_Hyougushi_in_Kyoto.jpg" alt="Curry">
-          <div class="food-card-overlay">
-            <h3 class="text-2xl font-bold text-white mb-2">🍛 Go Go Curry</h3>
-            <p class="text-gray-300 text-sm">Hearty Japanese curry rice</p>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="mt-12 text-center reveal-up">
-        <div class="inline-block bg-black/60 backdrop-blur-xl border border-neon-red/30 px-8 py-4 rounded-full">
-          <p class="text-gray-300 font-mono text-sm">
-            <span class="text-neon-red font-bold">8 different dishes</span> across 4 days • Budget: <span class="text-white font-bold">€80 total</span>
-          </p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
 
         <!-- Slide 7: Transport -->
         <div class="slide">
@@ -820,8 +847,7 @@
                         <div class="flex items-center gap-4">
                             <div class="w-2 h-12 bg-yellow-500 shadow-[0_0_15px_#eab308]"></div>
                             <div>
-                                <h2 class="text-5xl font-bold text-white">Loot & Logistics</h2>
-                                <p class="text-yellow-500/80 font-mono text-sm tracking-widest mt-1">/// INVENTORY_LOG_V1</p>
+                                <h2 class="text-5xl font-bold text-white">Souvenirs</h2>
                             </div>
                         </div>
                         <div class="text-right hidden md:block">
@@ -908,7 +934,7 @@
             <div class="bg-wrapper">
                 <div class="bg-img" style="background-image: url('summary3.jpg'); opacity: 0.4;"></div>
             </div>
-            <div class="overlay" style="background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.95));"></div>
+            <div class="overlay" style="background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.5));"></div>
 
             <div class="content">
                 <div class="w-full max-w-5xl reveal-up mx-auto">
@@ -1384,4 +1410,3 @@
 
 </body>
 </html>
-
