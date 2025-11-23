@@ -28,725 +28,1362 @@
     </script>
 
     <style>
-        body { background-color: #050505; color: white; overflow: hidden; }
+        body { 
+            background-color: #050505; 
+            color: white; 
+            overflow: hidden;
+            font-family: 'Space Grotesk', sans-serif;
+        }
         
-        /* --- SLIDE LOGIC --- */
+        /* Mobile Warning */
+        .mobile-warning {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: #050505;
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-warning {
+                display: flex;
+            }
+            .presentation-content {
+                display: none;
+            }
+        }
+        
+        /* Slide Logic */
         .slide {
-            position: absolute; inset: 0;
-            opacity: 0; visibility: hidden;
-            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: absolute; 
+            inset: 0;
+            opacity: 0; 
+            visibility: hidden;
+            transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
             transform: scale(1.05);
             z-index: 0;
         }
         .slide.active {
-            opacity: 1; visibility: visible;
+            opacity: 1; 
+            visibility: visible;
             transform: scale(1);
             z-index: 10;
         }
 
-        /* --- BACKGROUND IMAGES --- */
+        /* Background Images */
         .bg-wrapper {
-            position: absolute; inset: 0; z-index: 0;
+            position: absolute; 
+            inset: 0; 
+            z-index: 0;
             background-color: #1a1a1a;
         }
         .bg-img {
-            width: 100%; height: 100%;
-            background-size: cover; background-position: center;
+            width: 100%; 
+            height: 100%;
+            background-size: cover; 
+            background-position: center;
             opacity: 0.7; 
             filter: contrast(1.1) brightness(0.8);
-            transition: transform 10s ease;
+            transition: transform 12s ease-out;
         }
-        .active .bg-img { transform: scale(1.1); }
+        .active .bg-img { 
+            transform: scale(1.15); 
+        }
 
-        /* --- OVERLAY --- */
+        /* Overlay */
         .overlay {
-            position: absolute; inset: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+            position: absolute; 
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.9));
             z-index: 1;
         }
 
-        /* --- CONTENT --- */
+        /* Content */
         .content {
-            position: relative; z-index: 20;
-            height: 100%; width: 100%;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
+            position: relative; 
+            z-index: 20;
+            height: 100%; 
+            width: 100%;
+            display: flex; 
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
             padding: 2rem;
             text-shadow: 0 4px 20px rgba(0,0,0,1);
         }
 
-        /* --- ANIMATIONS --- */
+        /* Animations */
         .reveal-up {
-            opacity: 0; transform: translateY(30px);
-            transition: all 0.8s ease-out 0.3s;
+            opacity: 0; 
+            transform: translateY(40px);
+            transition: opacity 1s ease-out 0.3s, transform 1s ease-out 0.3s;
         }
-        .active .reveal-up { opacity: 1; transform: translateY(0); }
+        .active .reveal-up { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transition: opacity 1.2s ease-out 0.5s;
+        }
+        .active .fade-in {
+            opacity: 1;
+        }
+        
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: opacity 0.8s ease-out 0.4s, transform 0.8s ease-out 0.4s;
+        }
+        .active .slide-in-left {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: opacity 0.8s ease-out 0.6s, transform 0.8s ease-out 0.6s;
+        }
+        .active .slide-in-right {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        /* Staggered Animation */
+        .stagger-1 { transition-delay: 0.4s; }
+        .stagger-2 { transition-delay: 0.6s; }
+        .stagger-3 { transition-delay: 0.8s; }
+        .stagger-4 { transition-delay: 1s; }
+        
+        /* Hover Effects */
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,240,255,0.3);
+        }
+        
+        /* Glow Effect */
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0,240,255,0.5); }
+            50% { box-shadow: 0 0 40px rgba(0,240,255,0.8); }
+        }
+        
+        .glow-pulse {
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+        
+        /* Progress Bar Enhancement */
+        #progress {
+            box-shadow: 0 0 20px rgba(0,240,255,0.8), 0 -2px 10px rgba(0,240,255,0.5);
+        }
+        
+        /* Food Gallery */
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .food-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            aspect-ratio: 4/3;
+        }
+        
+        .food-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .food-card:hover img {
+            transform: scale(1.1);
+        }
+        
+        .food-card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 1.5rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .food-card:hover .food-card-overlay {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
+    <!-- Mobile Warning -->
+    <div class="mobile-warning">
+        <i class="fa-solid fa-mobile-screen-button text-6xl text-neon-blue mb-6"></i>
+        <h2 class="text-3xl font-bold mb-4">Écran Trop Petit</h2>
+        <p class="text-gray-300 max-w-md">
+            Cette présentation est optimisée pour les écrans de taille moyenne et grande. 
+            Veuillez utiliser un ordinateur ou une tablette pour une meilleure expérience.
+        </p>
+        <div class="mt-8 flex items-center gap-2 text-sm text-gray-500">
+            <i class="fa-solid fa-desktop"></i>
+            <span>Résolution minimale recommandée: 768px</span>
+        </div>
+    </div>
 
-<div class="fixed top-0 w-full z-50 p-6 flex justify-between items-center mix-blend-difference text-white pointer-events-none">
-        <div class="flex items-center gap-4">
-            <div class="w-3 h-3 bg-neon-red rounded-full animate-pulse"></div>
+    <div class="presentation-content">
+        <!-- Header -->
+        <div class="fixed top-0 w-full z-50 p-6 flex justify-between items-center mix-blend-difference text-white pointer-events-none">
+            <div class="flex items-center gap-4">
+                <div class="w-3 h-3 bg-neon-red rounded-full animate-pulse"></div>
+                
+                <div class="w-16 h-8 bg-white flex justify-center items-center shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                    <div class="w-3 h-3 bg-[#bc002d] rounded-full"></div>
+                </div>
+                
+                <div class="h-4 w-[1px] bg-white/30"></div>
+            </div>
+
+            <div class="font-mono text-xs text-neon-blue font-bold tracking-widest">
+                TEAM: SHEM & RUDOLF
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="fixed bottom-0 left-0 h-1 bg-neon-blue transition-all duration-500 z-50" id="progress" style="width: 0%"></div>
+
+        <!-- Slide 1: Cover -->
+        <div class="slide active">
+            <div class="bg-wrapper">
+                <div class="bg-img" style="background-image: url('garde1.jpg'); transform: scale(1.1);"></div>
+            </div>
+            <div class="overlay" style="background: radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.95) 100%);"></div>
             
-            <div class="w-16 h-8 bg-white flex justify-center items-center shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-                <div class="w-3 h-3 bg-[#bc002d] rounded-full"></div>
-            </div>
-            
-            <div class="h-4 w-[1px] bg-white/30"></div>
-        </div>
-
-        <div class="font-mono text-xs text-neon-blue font-bold tracking-widest">
-            TEAM: SHEM & RUDOLF
-        </div>
-    </div>
-
-    <div class="fixed bottom-0 left-0 h-1 bg-neon-blue transition-all duration-500 z-50 shadow-[0_0_15px_#00f0ff]" id="progress" style="width: 0%"></div>
-
-<div class="slide active">
-        <div class="bg-wrapper">
-            <div class="bg-img" style="background-image: url('garde1.jpg'); transform: scale(1.1);"></div>
-        </div>
-        <div class="overlay" style="background: radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.95) 100%);"></div>
-        
-        <div class="content text-center relative overflow-hidden">
-            
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20rem] font-black text-white/5 pointer-events-none z-0 select-none font-jp leading-none">
-                東京
-            </div>
-
-            <div class="reveal-up relative z-10">
-                <div class="flex items-center justify-center gap-4 mb-6 opacity-80">
-                    <div class="h-[1px] w-12 bg-neon-blue"></div>
-                    <div class="h-[1px] w-12 bg-neon-blue"></div>
+            <div class="content text-center relative overflow-hidden">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20rem] font-black text-white/5 pointer-events-none z-0 select-none font-jp leading-none">
+                    東京
                 </div>
 
-                <h1 class="text-6xl md:text-8xl font-black font-jp tracking-tighter leading-none mb-8 drop-shadow-[0_0_25px_rgba(0,0,0,0.8)]">
-                    <span class="block text-2xl md:text-4xl font-light text-gray-300 tracking-widest mb-2 uppercase">Operation:</span>
-                    LAND OF <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-red via-purple-500 to-neon-blue animate-pulse">SUSHI</span>
-                </h1>
-
-                <div class="inline-block relative group">
-                    <div class="absolute -inset-1 bg-gradient-to-r from-neon-red to-neon-blue rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-                    <div class="relative bg-black/80 backdrop-blur-xl border border-white/10 px-8 py-4 rounded-lg">
-                        <div class="flex items-center gap-3">
-                            <i class="fa-solid fa-terminal text-neon-green text-xs"></i>
-                            <p class="text-lg md:text-xl font-mono font-bold text-white tracking-wide">
-                                "PRECISION BUDGETING. ZERO DEVIATION."
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
- 
-                </div>
-            </div>
-        </div>
-    </div>
-
-<div class="slide">
-        <div class="bg-wrapper">
-            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=2070&auto=format&fit=crop'); opacity: 0.7;"></div>
-        </div>
-        <div class="overlay" style="background: radial-gradient(circle at top left, rgba(0,0,0,0.4), rgba(0,0,0,0.95));"></div>
-        
-        <div class="content">
-            <div class="w-full max-w-6xl grid md:grid-cols-2 gap-16 items-center">
-                
-                <div class="reveal-up relative">
-                    <div class="absolute -top-20 -left-20 w-64 h-64 bg-neon-blue/20 rounded-full blur-[100px] -z-10"></div>
-                    
-                    <h2 class="text-[5rem] md:text-[7rem] font-bold leading-none tracking-tighter drop-shadow-2xl">
-                        <span class="block text-white">WHY</span>
-                        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-neon-blue via-white to-purple-500">TOKYO?</span>
-                    </h2>
-                    <div class="h-2 w-32 bg-gradient-to-r from-neon-red to-transparent mt-8 animate-pulse"></div>
-                </div>
-                
-                <div class="reveal-up bg-black/60 backdrop-blur-xl border border-white/10 p-10 rounded-3xl relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neon-blue via-transparent to-neon-red"></div>
-                    
-                    <i class="fa-solid fa-quote-left text-8xl text-neon-blue/10 absolute top-4 left-4 z-0"></i>
-
-                    <div class="relative z-10 md:pl-12 pt-4">
-                        <p class="text-2xl text-gray-100 leading-relaxed font-light drop-shadow-lg">
-                            "Tokyo stands as the ultimate paradox: a hyper-modern metropolis rooted in deep tradition. We chose this destination to challenge the myth of its inaccessibility, <span class="text-white font-bold">proving that we could unlock the city's complexity and culture strictly within our budget constraints.</span>"
-                        </p>
-                         <div class="flex items-center gap-2 mt-8 opacity-60">
-                             <div class="w-2 h-2 bg-neon-green rounded-full animate-ping"></div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="slide">
-        <div class="bg-wrapper">
-            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop')"></div>
-        </div>
-        <div class="overlay"></div>
-
-        <div class="content">
-            <div class="w-full max-w-5xl grid md:grid-cols-2 gap-12 items-center">
-                <div class="reveal-up">
-                    <h2 class="text-5xl font-bold mb-6 border-l-4 border-neon-blue pl-6 shadow-black drop-shadow-lg">Logistics: Injection</h2>
-                    <p class="text-lg text-gray-100 bg-black/40 p-4 rounded border border-white/20 backdrop-blur-sm">
-                        Reaching the archipelago is the primary cost driver. This fixed variable represents >50% of our resources.
-                    </p>
-                </div>
-                
-                <div class="reveal-up bg-black/50 backdrop-blur-md border border-white/20 p-8 rounded-2xl shadow-2xl">
-                    <div class="flex justify-between items-start mb-8">
-                        <div>
-                            <span class="text-gray-300 text-xs uppercase tracking-wider">Carrier</span>
-                            <h3 class="text-3xl font-bold text-white">Shanghai Airlines</h3>
-                        </div>
-                        <i class="fa-solid fa-plane-departure text-4xl text-neon-blue"></i>
-                    </div>
-                    <div class="space-y-4 font-mono">
-                        <div class="flex justify-between border-b border-white/10 pb-2">
-                            <span class="text-gray-300">Route</span>
-                            <span class="text-white">CAS <i class="fa-solid fa-arrow-right mx-2 text-neon-red"></i> NRT</span>
-                        </div>
-                        <div class="flex justify-between items-center pt-2">
-                            <span class="text-gray-300">Allocation</span>
-                            <span class="text-4xl font-bold text-neon-red">€1,172</span>
-                        </div>
-                    </div>
-                    <div class="mt-6 flex items-center gap-2 text-xs text-red-200 bg-red-900/40 p-3 rounded border border-red-500/30">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                        <span>IMPACT: 58.6% of Total Budget</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="slide">
-        <div class="bg-wrapper">
-            <div class="bg-img" style="background-image: url('capsule1.jpg');"></div>
-        </div>
-        <div class="overlay"></div>
-
-        <div class="content">
-            <div class="w-full max-w-4xl reveal-up bg-black/60 backdrop-blur-xl border border-neon-blue/30 p-10 rounded-2xl shadow-2xl">
-                <div class="flex flex-col md:flex-row justify-between items-center mb-8">
-                    <h2 class="text-5xl font-bold text-white mb-4 md:mb-0">Habitat: Efficiency</h2>
-                    <span class="bg-neon-blue text-black font-bold px-4 py-2 rounded uppercase tracking-widest text-sm">Optimized Pod</span>
-                </div>
-
-                <div class="grid md:grid-cols-2 gap-12">
-                    <div class="space-y-6">
-                        <div>
-                            <p class="text-gray-400 text-xs uppercase tracking-widest mb-1">Concept</p>
-                            <p class="text-xl text-white">"Maximum utility in minimum space. Sleeping in the machine."</p>
-                        </div>
-                        <div>
-                            <p class="text-gray-400 text-xs uppercase tracking-widest mb-1">Location</p>
-                            <p class="text-xl text-white">Shinjuku District</p>
-                        </div>
+                <div class="reveal-up relative z-10">
+                    <div class="flex items-center justify-center gap-4 mb-6 opacity-80">
+                        <div class="h-[1px] w-12 bg-neon-blue"></div>
+                        <div class="h-[1px] w-12 bg-neon-blue"></div>
                     </div>
 
-                    <div class="border-l border-white/20 pl-8 space-y-6 font-mono">
-                        <div>
-                            <div class="text-xs text-gray-500 uppercase">Rate per Night</div>
-                            <div class="text-3xl text-white font-bold">€32.00</div>
-                        </div>
-                        <div class="border-t border-white/20 pt-4">
-                            <div class="text-xs text-gray-500 uppercase">Total (4 Nights)</div>
-                            <div class="text-5xl font-bold text-neon-blue">€128</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                    <h1 class="text-6xl md:text-8xl font-black font-jp tracking-tighter leading-none mb-8 drop-shadow-[0_0_25px_rgba(0,0,0,0.8)]">
+                        <span class="block text-2xl md:text-4xl font-light text-gray-300 tracking-widest mb-2 uppercase">Operation:</span>
+                        LAND OF <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-red via-purple-500 to-neon-blue animate-pulse">SUSHI</span>
+                    </h1>
 
-    <div class="slide">
-        <div class="bg-wrapper">
-             <div class="bg-img" style="background-image: url('cuisine4.jpg')"></div>
-        </div>
-        <div class="overlay"></div>
-
-        <div class="content">
-            <div class="w-full max-w-7xl"> 
-                <div class="flex items-end justify-between mb-10 border-b border-white/30 pb-4 reveal-up">
-                    <div>
-                        <h2 class="text-5xl font-bold text-shadow-md">Eating & Drinking</h2>
-                        <p class="text-sm text-gray-300 font-mono mt-2">DAILY LOG: DAY 01 - 04</p>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-xs text-gray-300 uppercase">Daily Limit</div>
-                        <div class="text-3xl font-mono font-bold text-neon-red">€20.00</div>
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 reveal-up font-mono text-sm">
-                    
-                    <div class="bg-black/70 border border-white/20 p-5 rounded-xl hover:border-neon-blue transition backdrop-blur-md flex flex-col h-full">
-                        <div class="border-b border-white/10 pb-2 mb-4 flex justify-between items-center">
-                            <h3 class="text-xl font-bold text-neon-blue">DAY 01</h3>
-                            <span class="text-xs text-gray-500">SHINJUKU</span>
-                        </div>
-                        <div class="space-y-4 flex-grow">
-                            <div><span class="text-xs text-gray-400 block">Breakfast</span><span class="font-bold">Onigiri & Water</span><div class="text-right text-xs text-neon-red">€3.00</div></div>
-                            <div><span class="text-xs text-gray-400 block">Lunch</span><span class="font-bold">Matsuya Beef Bowl</span><div class="text-right text-xs text-neon-red">€5.00</div></div>
-                            <div><span class="text-xs text-gray-400 block">Dinner</span><span class="font-bold">Omoide Yakitori</span><div class="text-right text-xs text-neon-red">€12.00</div></div>
-                        </div>
-                        <div class="border-t border-white/10 pt-2 mt-4 text-right font-bold text-green-400">TOTAL: €20.00</div>
-                    </div>
-
-                    <div class="bg-black/70 border border-white/20 p-5 rounded-xl hover:border-neon-blue transition backdrop-blur-md flex flex-col h-full">
-                        <div class="border-b border-white/10 pb-2 mb-4 flex justify-between items-center">
-                            <h3 class="text-xl font-bold text-neon-blue">DAY 02</h3>
-                            <span class="text-xs text-gray-500">ASAKUSA</span>
-                        </div>
-                        <div class="space-y-4 flex-grow">
-                            <div><span class="text-xs text-gray-400 block">Breakfast</span><span class="font-bold">Melonpan & Tea</span><div class="text-right text-xs text-neon-red">€4.00</div></div>
-                            <div><span class="text-xs text-gray-400 block">Lunch</span><span class="font-bold">Standing Soba</span><div class="text-right text-xs text-neon-red">€5.00</div></div>
-                            <div><span class="text-xs text-gray-400 block">Dinner</span><span class="font-bold">Tenya Tempura</span><div class="text-right text-xs text-neon-red">€11.00</div></div>
-                        </div>
-                        <div class="border-t border-white/10 pt-2 mt-4 text-right font-bold text-green-400">TOTAL: €20.00</div>
-                    </div>
-
-                    <div class="bg-black/70 border border-white/20 p-5 rounded-xl hover:border-neon-blue transition backdrop-blur-md flex flex-col h-full">
-                        <div class="border-b border-white/10 pb-2 mb-4 flex justify-between items-center">
-                            <h3 class="text-xl font-bold text-neon-blue">DAY 03</h3>
-                            <span class="text-xs text-gray-500">SHIBUYA</span>
-                        </div>
-                        <div class="space-y-4 flex-grow">
-                            <div><span class="text-xs text-gray-400 block">Breakfast</span><span class="font-bold">Egg Sandwich</span><div class="text-right text-xs text-neon-red">€3.00</div></div>
-                            <div><span class="text-xs text-gray-400 block">Lunch</span><span class="font-bold">Gyoza Set Meal</span><div class="text-right text-xs text-neon-red">€6.00</div></div>
-                            <div><span class="text-xs text-gray-400 block">Dinner</span><span class="font-bold">Kura Sushi</span><div class="text-right text-xs text-neon-red">€11.00</div></div>
-                        </div>
-                        <div class="border-t border-white/10 pt-2 mt-4 text-right font-bold text-green-400">TOTAL: €20.00</div>
-                    </div>
-
-                    <div class="bg-black/70 border border-white/20 p-5 rounded-xl hover:border-neon-blue transition backdrop-blur-md flex flex-col h-full">
-                        <div class="border-b border-white/10 pb-2 mb-4 flex justify-between items-center">
-                            <h3 class="text-xl font-bold text-neon-blue">DAY 04</h3>
-                            <span class="text-xs text-gray-500">AKIHABARA</span>
-                        </div>
-                        <div class="space-y-4 flex-grow">
-                            <div><span class="text-xs text-gray-400 block">Breakfast</span><span class="font-bold">Energy Jelly</span><div class="text-right text-xs text-neon-red">€4.00</div></div>
-                            <div><span class="text-xs text-gray-400 block">Lunch</span><span class="font-bold">Go Go Curry</span><div class="text-right text-xs text-neon-red">€6.00</div></div>
-                            <div><span class="text-xs text-gray-400 block">Dinner</span><span class="font-bold">Tonkatsu Wako</span><div class="text-right text-xs text-neon-red">€10.00</div></div>
-                        </div>
-                        <div class="border-t border-white/10 pt-2 mt-4 text-right font-bold text-green-400">TOTAL: €20.00</div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="slide">
-        <div class="bg-wrapper">
-            <div class="bg-img" style="background-image: url('transport2.jpg')"></div>
-        </div>
-        <div class="overlay"></div>
-
-        <div class="content">
-            <div class="w-full max-w-5xl flex flex-col md:flex-row gap-16 items-center reveal-up">
-                <div class="flex-1">
-                     <h2 class="text-6xl font-bold mb-4 text-neon-blue text-shadow-lg">Moving Around</h2>
-                     <p class="text-sm font-mono text-gray-400 mb-8">SUB-SYSTEM: URBAN MOBILITY MATRIX</p>
-                     <p class="text-xl text-gray-200 leading-relaxed bg-black/40 p-4 rounded border border-white/10">
-                        Navigating the complex transit matrix of Tokyo requires precise route calculation. The subway system is our primary vector.
-                     </p>
-                </div>
-
-                <div class="flex-1 w-full bg-black/60 p-8 rounded-2xl border border-white/20 backdrop-blur-md shadow-2xl">
-                    <div class="flex justify-between items-end mb-6">
-                        <div>
-                             <i class="fa-solid fa-train-subway text-4xl text-neon-blue mb-4"></i>
-                            <h3 class="font-bold text-3xl">Tokyo Metro</h3>
-                        </div>
-                        <span class="font-mono text-5xl text-white font-bold">€40</span>
-                    </div>
-                    
-                    <div class="space-y-4">
-                        <div class="flex justify-between text-sm text-gray-400">
-                            <span>Transit Pass</span>
-                            <span>Pasmo / Suica</span>
-                        </div>
-                        <div class="flex justify-between text-sm text-gray-400">
-                             <span>Coverage</span>
-                             <span>Cross-Ward</span>
-                        </div>
-                        <div class="w-full bg-gray-700 h-4 rounded-full overflow-hidden mt-4">
-                            <div class="bg-neon-blue w-[10%] h-full"></div>
-                        </div>
-                        <div class="text-right text-xs text-neon-blue mt-1">Budget Impact: 2.0%</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="slide">
-        <div class="bg-wrapper">
-            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=2070&auto=format&fit=crop')"></div>
-        </div>
-        <div class="overlay"></div>
-
-        <div class="content">
-            <div class="w-full max-w-7xl">
-                <div class="flex justify-between items-end mb-12 border-b border-green-500/50 pb-4 reveal-up">
-                     <div>
-                        <h2 class="text-5xl font-bold text-white text-shadow-md">Fun & Sightseeing</h2>
-                        <p class="text-sm text-gray-300 font-mono mt-2">DAILY LOG: DAY 01 - 04</p>
-                     </div>
-                     <div class="text-right">
-                        <span class="text-green-400 text-sm font-bold tracking-widest uppercase block">Strategy</span>
-                        <span class="text-3xl font-mono text-white">Free Exploration</span>
-                     </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 reveal-up font-mono text-sm">
-                    
-                    <div class="bg-black/70 border border-white/20 p-5 rounded-xl hover:border-green-500 transition backdrop-blur-md flex flex-col h-full">
-                        <div class="border-b border-white/10 pb-2 mb-4 flex justify-between items-center">
-                            <h3 class="text-xl font-bold text-white"><i class="fa-solid fa-city text-purple-500 mr-2"></i>DAY 01</h3>
-                            <span class="text-xs text-gray-500">SHINJUKU</span>
-                        </div>
-                        <div class="space-y-3 flex-grow">
-                            <p class="text-gray-300">Arrival & Check-in</p>
-                            <p class="text-gray-300">Neon District Walk</p>
-                            <p class="text-gray-300">Godzilla Head</p>
-                            <p class="text-gray-300">Omoide Yokocho</p>
-                        </div>
-                        <div class="border-t border-white/10 pt-2 mt-4 text-right font-bold text-green-400">COST: €0.00</div>
-                    </div>
-
-                    <div class="bg-black/70 border border-white/20 p-5 rounded-xl hover:border-green-500 transition backdrop-blur-md flex flex-col h-full">
-                        <div class="border-b border-white/10 pb-2 mb-4 flex justify-between items-center">
-                            <h3 class="text-xl font-bold text-white"><i class="fa-solid fa-torii-gate text-red-500 mr-2"></i>DAY 02</h3>
-                            <span class="text-xs text-gray-500">ASAKUSA</span>
-                        </div>
-                        <div class="space-y-3 flex-grow">
-                            <p class="text-gray-300">Senso-ji Temple</p>
-                            <p class="text-gray-300">Nakamise Street</p>
-                            <p class="text-gray-300">Ueno Park Walk</p>
-                            <p class="text-gray-300">Ameyoko Market</p>
-                        </div>
-                        <div class="border-t border-white/10 pt-2 mt-4 text-right font-bold text-green-400">COST: €0.00</div>
-                    </div>
-
-                    <div class="bg-black/70 border border-white/20 p-5 rounded-xl hover:border-green-500 transition backdrop-blur-md flex flex-col h-full">
-                        <div class="border-b border-white/10 pb-2 mb-4 flex justify-between items-center">
-                            <h3 class="text-xl font-bold text-white"><i class="fa-solid fa-users text-blue-500 mr-2"></i>DAY 03</h3>
-                            <span class="text-xs text-gray-500">SHIBUYA</span>
-                        </div>
-                        <div class="space-y-3 flex-grow">
-                            <p class="text-gray-300">Scramble Crossing</p>
-                            <p class="text-gray-300">Hachiko Statue</p>
-                            <p class="text-gray-300">Harajuku Stroll</p>
-                            <p class="text-gray-300">Takeshita Street</p>
-                        </div>
-                        <div class="border-t border-white/10 pt-2 mt-4 text-right font-bold text-green-400">COST: €0.00</div>
-                    </div>
-
-                    <div class="bg-black/70 border border-white/20 p-5 rounded-xl hover:border-green-500 transition backdrop-blur-md flex flex-col h-full">
-                        <div class="border-b border-white/10 pb-2 mb-4 flex justify-between items-center">
-                            <h3 class="text-xl font-bold text-white"><i class="fa-solid fa-gamepad text-yellow-500 mr-2"></i>DAY 04</h3>
-                            <span class="text-xs text-gray-500">AKIHABARA</span>
-                        </div>
-                        <div class="space-y-3 flex-grow">
-                            <p class="text-gray-300">Electric Town</p>
-                            <p class="text-gray-300">Sega/Taito Arcades</p>
-                            <p class="text-gray-300">Radio Kaikan</p>
-                            <p class="text-gray-300">Last Shopping</p>
-                        </div>
-                        <div class="border-t border-white/10 pt-2 mt-4 text-right font-bold text-green-400">COST: €0.00</div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    
-<div class="slide">
-        <div class="bg-wrapper">
-            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1528164344705-47542687000d?q=80&w=2071&auto=format&fit=crop'); opacity: 0.6;"></div>
-        </div>
-        <div class="overlay" style="background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.9));"></div>
-
-        <div class="content">
-             <div class="w-full max-w-6xl reveal-up">
-                
-                <div class="flex justify-between items-end mb-10 border-b border-yellow-500/30 pb-4">
-                    <div class="flex items-center gap-4">
-                        <div class="w-2 h-12 bg-yellow-500 shadow-[0_0_15px_#eab308]"></div>
-                        <div>
-                            <h2 class="text-5xl font-bold text-white">Loot & Logistics</h2>
-                            <p class="text-yellow-500/80 font-mono text-sm tracking-widest mt-1">/// INVENTORY_LOG_V1</p>
-                        </div>
-                    </div>
-                    <div class="text-right hidden md:block">
-                        <span class="text-gray-400 text-xs uppercase">Transaction Status</span>
-                        <div class="text-green-400 font-bold font-mono">COMPLETED</div>
-                    </div>
-                </div>
-
-                <div class="flex flex-col md:flex-row gap-8">
-                    
-                    <div class="w-full md:w-1/3">
-                        <div class="bg-black/60 backdrop-blur-xl border border-yellow-500/50 p-8 rounded-2xl shadow-lg h-full flex flex-col justify-between relative overflow-hidden">
-                            <div class="absolute -right-10 -top-10 w-32 h-32 bg-yellow-500/10 rounded-full blur-2xl"></div>
-                            
-                            <div>
-                                <h3 class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Total Allocation</h3>
-                                <div class="text-7xl font-mono font-bold text-white mb-2">€580</div>
-                                <div class="flex items-center gap-2 text-yellow-400 text-sm font-mono mb-6">
-                                    <i class="fa-solid fa-chart-pie"></i> 29% of Total Budget
-                                </div>
-                            </div>
-
-                            <div class="space-y-2">
-                                <div class="flex justify-between text-xs text-gray-400 uppercase">
-                                    <span>Resource Usage</span>
-                                    <span>High Priority</span>
-                                </div>
-                                <div class="w-full bg-gray-800 h-3 rounded-full overflow-hidden border border-gray-700">
-                                    <div class="bg-yellow-500 h-full w-[29%] shadow-[0_0_10px_#eab308]"></div>
-                                </div>
-                                <p class="text-xs text-gray-500 mt-4 leading-relaxed">
-                                    Strategic allocation for high-value electronics, cultural artifacts, and obligatory gifts (Omiyage).
+                    <div class="inline-block relative group">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-neon-red to-neon-blue rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                        <div class="relative bg-black/80 backdrop-blur-xl border border-white/10 px-8 py-4 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-terminal text-green-400 text-xs"></i>
+                                <p class="text-lg md:text-xl font-mono font-bold text-white tracking-wide">
+                                    "PRECISION BUDGETING. ZERO DEVIATION."
                                 </p>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
 
-                    <div class="w-full md:w-2/3 grid gap-4">
+        <!-- Slide 2: Why Tokyo -->
+        <div class="slide">
+            <div class="bg-wrapper">
+                <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=2070&auto=format&fit=crop'); opacity: 0.7;"></div>
+            </div>
+            <div class="overlay" style="background: radial-gradient(circle at top left, rgba(0,0,0,0.4), rgba(0,0,0,0.95));"></div>
+            
+            <div class="content">
+                <div class="w-full max-w-6xl grid md:grid-cols-2 gap-16 items-center mx-auto">
+                    <div class="slide-in-left relative">
+                        <div class="absolute -top-20 -left-20 w-64 h-64 bg-neon-blue/20 rounded-full blur-[100px] -z-10"></div>
                         
-                        <div class="group bg-black/40 border border-white/10 hover:border-red-500 hover:bg-black/60 p-4 rounded-xl transition-all duration-300 flex items-center gap-6 backdrop-blur-sm">
-                            <div class="w-16 h-16 bg-white/5 rounded-lg flex items-center justify-center text-3xl border border-white/10 group-hover:border-red-500/50 transition shadow-inner">
-                                👺
-                            </div>
-                            <div class="flex-grow">
-                                <div class="flex justify-between items-start">
-                                    <h4 class="text-xl font-bold text-white group-hover:text-red-400 transition">Daruma Doll</h4>
-                                    <span class="text-[10px] font-mono bg-red-900/30 text-red-400 border border-red-500/30 px-2 py-1 rounded">ITEM_ACQUIRED</span>
-                                </div>
-                                <p class="text-sm text-gray-400 mt-1">Symbol of perseverance. One eye painted to set the goal.</p>
+                        <h2 class="text-[5rem] md:text-[7rem] font-bold leading-none tracking-tighter drop-shadow-2xl">
+                            <span class="block text-white">WHY</span>
+                            <span class="block text-transparent bg-clip-text bg-gradient-to-r from-neon-blue via-white to-purple-500">TOKYO?</span>
+                        </h2>
+                        <div class="h-2 w-32 bg-gradient-to-r from-neon-red to-transparent mt-8"></div>
+                    </div>
+                    
+                    <div class="slide-in-right bg-black/60 backdrop-blur-xl border border-white/10 p-10 rounded-3xl relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] card-hover">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neon-blue via-transparent to-neon-red"></div>
+                        
+                        <i class="fa-solid fa-quote-left text-8xl text-neon-blue/10 absolute top-4 left-4 z-0"></i>
+
+                        <div class="relative z-10 md:pl-12 pt-4">
+                            <p class="text-2xl text-gray-100 leading-relaxed font-light drop-shadow-lg">
+                                "Tokyo stands as the ultimate paradox: a hyper-modern metropolis rooted in deep tradition. We chose this destination to challenge the myth of its inaccessibility, <span class="text-white font-bold">proving that we could unlock the city's complexity and culture strictly within our budget constraints.</span>"
+                            </p>
+                            <div class="flex items-center gap-2 mt-8 opacity-60">
+                                <div class="w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
                             </div>
                         </div>
-
-                        <div class="group bg-black/40 border border-white/10 hover:border-yellow-500 hover:bg-black/60 p-4 rounded-xl transition-all duration-300 flex items-center gap-6 backdrop-blur-sm">
-                            <div class="w-16 h-16 bg-white/5 rounded-lg flex items-center justify-center text-3xl border border-white/10 group-hover:border-yellow-500/50 transition shadow-inner">
-                                🐱
-                            </div>
-                            <div class="flex-grow">
-                                <div class="flex justify-between items-start">
-                                    <h4 class="text-xl font-bold text-white group-hover:text-yellow-400 transition">Maneki-neko</h4>
-                                    <span class="text-[10px] font-mono bg-yellow-900/30 text-yellow-400 border border-yellow-500/30 px-2 py-1 rounded">ITEM_ACQUIRED</span>
-                                </div>
-                                <p class="text-sm text-gray-400 mt-1">Traditional lucky cat. Ceramic build. Kinetic arm mechanism.</p>
-                            </div>
-                        </div>
-
-                        <div class="group bg-black/40 border border-white/10 hover:border-purple-500 hover:bg-black/60 p-4 rounded-xl transition-all duration-300 flex items-center gap-6 backdrop-blur-sm">
-                            <div class="w-16 h-16 bg-white/5 rounded-lg flex items-center justify-center text-3xl border border-white/10 group-hover:border-purple-500/50 transition shadow-inner">
-                                👘
-                            </div>
-                            <div class="flex-grow">
-                                <div class="flex justify-between items-start">
-                                    <h4 class="text-xl font-bold text-white group-hover:text-purple-400 transition">Furoshiki & Misc</h4>
-                                    <span class="text-[10px] font-mono bg-purple-900/30 text-purple-400 border border-purple-500/30 px-2 py-1 rounded">ITEM_ACQUIRED</span>
-                                </div>
-                                <p class="text-sm text-gray-400 mt-1">Modular wrapping cloth & various tech peripherals from Akihabara.</p>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
-             </div>
+            </div>
         </div>
-    </div>
 
+        <!-- Slide 3: Flight -->
+        <div class="slide">
+            <div class="bg-wrapper">
+                <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop')"></div>
+            </div>
+            <div class="overlay"></div>
 
-    <div class="slide">
-        <div class="bg-wrapper">
-            <div class="bg-img" style="background-image: url('summary3.jpg'); opacity: 0.4;"></div>
-        </div>
-        <div class="overlay" style="background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.95));"></div>
-
-        <div class="content">
-            <div class="w-full max-w-5xl reveal-up">
-                
-                <div class="flex flex-col md:flex-row justify-between items-end mb-8 border-b border-neon-blue/30 pb-4">
-                    <div>
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="bg-neon-blue/10 p-2 rounded border border-neon-blue/30">
-                                <i class="fa-solid fa-file-invoice-dollar text-3xl text-neon-blue"></i>
-                            </div>
-                            <h1 class="text-4xl font-bold text-white tracking-tight text-shadow-[0_0_15px_rgba(0,240,255,0.5)]">Trip Summary</h1>
-                        </div>
-                        <p class="text-neon-blue font-mono text-sm tracking-widest uppercase flex items-center gap-2">
-                            <span class="w-2 h-2 bg-neon-blue rounded-full animate-pulse"></span>
-                            /// FINANCIAL CLOSE-OUT REPORT_FINAL
+            <div class="content">
+                <div class="w-full max-w-5xl grid md:grid-cols-2 gap-12 items-center mx-auto">
+                    <div class="reveal-up">
+                        <h2 class="text-5xl font-bold mb-6 border-l-4 border-neon-blue pl-6 shadow-black drop-shadow-lg">Logistics: Injection</h2>
+                        <p class="text-lg text-gray-100 bg-black/40 p-4 rounded border border-white/20 backdrop-blur-sm">
+                            Reaching the archipelago is the primary cost driver. This fixed variable represents >50% of our resources.
                         </p>
                     </div>
                     
-                    <div class="mt-6 md:mt-0 bg-black/60 border border-green-500/50 p-4 rounded-lg backdrop-blur-md shadow-[0_0_15px_rgba(34,197,94,0.2)] flex flex-col items-end">
-                        <div class="text-xs uppercase font-bold text-green-400 tracking-wider mb-1">Budget Variance</div>
-                        <div class="text-4xl font-mono font-bold text-green-400 flex items-center text-shadow-[0_0_10px_#22c55e]">
-                            <i class="fa-solid fa-check-circle mr-3 text-2xl"></i>€0.00
+                    <div class="reveal-up bg-black/50 backdrop-blur-md border border-white/20 p-8 rounded-2xl shadow-2xl card-hover">
+                        <div class="flex justify-between items-start mb-8">
+                            <div>
+                                <span class="text-gray-300 text-xs uppercase tracking-wider">Carrier</span>
+                                <h3 class="text-3xl font-bold text-white">Shanghai Airlines</h3>
+                            </div>
+                            <i class="fa-solid fa-plane-departure text-4xl text-neon-blue"></i>
+                        </div>
+                        <div class="space-y-4 font-mono">
+                            <div class="flex justify-between border-b border-white/10 pb-2">
+                                <span class="text-gray-300">Route</span>
+                                <span class="text-white">CAS <i class="fa-solid fa-arrow-right mx-2 text-neon-red"></i> NRT</span>
+                            </div>
+                            <div class="flex justify-between items-center pt-2">
+                                <span class="text-gray-300">Allocation</span>
+                                <span class="text-4xl font-bold text-neon-red">€1,172</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 flex items-center gap-2 text-xs text-red-200 bg-red-900/40 p-3 rounded border border-red-500/30">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span>IMPACT: 58.6% of Total Budget</span>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="bg-black/40 backdrop-blur-xl rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+        <!-- Slide 4: Accommodation -->
+        <div class="slide">
+            <div class="bg-wrapper">
+                <div class="bg-img" style="background-image: url('capsule1.jpg');"></div>
+            </div>
+            <div class="overlay"></div>
+
+            <div class="content">
+                <div class="w-full max-w-4xl reveal-up bg-black/60 backdrop-blur-xl border border-neon-blue/30 p-10 rounded-2xl shadow-2xl card-hover mx-auto">
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+                        <h2 class="text-5xl font-bold text-white mb-4 md:mb-0">Habitat: Efficiency</h2>
+                        <span class="bg-neon-blue text-black font-bold px-4 py-2 rounded uppercase tracking-widest text-sm">Optimized Pod</span>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <div class="space-y-6">
+                            <div>
+                                <p class="text-gray-400 text-xs uppercase tracking-widest mb-1">Concept</p>
+                                <p class="text-xl text-white">"Maximum utility in minimum space. Sleeping in the machine."</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-xs uppercase tracking-widest mb-1">Location</p>
+                                <p class="text-xl text-white">Shinjuku District</p>
+                            </div>
+                        </div>
+
+                        <div class="border-l border-white/20 pl-8 space-y-6 font-mono">
+                            <div>
+                                <div class="text-xs text-gray-500 uppercase">Rate per Night</div>
+                                <div class="text-3xl text-white font-bold">€32.00</div>
+                            </div>
+                            <div class="border-t border-white/20 pt-4">
+                                <div class="text-xs text-gray-500 uppercase">Total (4 Nights)</div>
+                                <div class="text-5xl font-bold text-neon-blue">€128</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Food -->
+        <div class="slide">
+            <div class="bg-wrapper">
+                <div class="bg-img" style="background-image: url('cuisine4.jpg')"></div>
+            </div>
+            <div class="overlay"></div>
+
+            <div class="content">
+                <div class="w-full max-w-7xl mx-auto"> 
+                    <div class="flex items-end justify-between mb-10 border-b border-white/30 pb-4 reveal-up">
+                        <div>
+                            <h2 class="text-5xl font-bold text-shadow-md">Eating & Drinking</h2>
+                            <p class="text-sm text-gray-300 font-mono mt-2">DAILY LOG: DAY 01 - 04</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs text-gray-300 uppercase">Daily Limit</div>
+                            <div class="text-3xl font-mono font-bold text-neon-red">€20.00</div>
+                        </div>
+                    </div>
                     
-                    <div class="grid grid-cols-12 gap-4 p-4 bg-white/5 text-gray-400 uppercase text-xs font-mono tracking-widest border-b border-white/10">
-                        <div class="col-span-5 pl-4">Category Entity</div>
-                        <div class="col-span-3 text-right">Cost (€)</div>
-                        <div class="col-span-4 hidden md:block pl-4">Impact Allocation</div>
-                    </div>
-
-                    <div class="divide-y divide-white/10 font-mono text-sm">
-                        
-                        <div class="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/5 transition group relative">
-                            <div class="col-span-5 pl-4 flex items-center gap-3 text-white">
-                                <i class="fa-solid fa-plane text-neon-blue w-6"></i>
-                                <span class="group-hover:text-neon-blue transition">Flight (Shanghai Airlines)</span>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 font-mono text-sm">
+                        <div class="reveal-up stagger-1 bg-black/70 border border-white/20 p-5 rounded-xl hover:border-neon-blue transition backdrop-blur-md flex flex-col h-full card-hover">
+                            <div class="border-b border-white/10 pb-2 mb-4 flex justify-between items-center">
+                                <h3 class="text-xl font-bold text-neon-blue">DAY 01</h3>
+                                <span class="text-xs text-gray-500">SHINJUKU</span>
                             </div>
-                            <div class="col-span-3 text-right font-bold text-lg text-white">1,172.00</div>
-                            <div class="col-span-4 hidden md:flex items-center gap-3 pl-4">
-                                <div class="text-gray-400 w-12 text-right">58.6%</div>
-                                <div class="flex-grow bg-gray-800 h-2 rounded-full overflow-hidden border border-gray-700">
-                                    <div class="bg-neon-blue h-full w-[58.6%] shadow-[0_0_8px_#00f0ff]"></div>
-                                </div>
+                            <div class="space-y-4 flex-grow">
+                                <div><span class="text-xs text-gray-400 block">Breakfast</span><span class="font-bold">Onigiri & Water</span><div class="text-right text-xs text-neon-red">€3.00</div></div>
+                                <div><span class="text-xs text-gray-400 block">Lunch</span><span class="font-bold">Matsuya Beef Bowl</span><div class="text-right text-xs text-neon-red">€5.00</div></div>
+                                <div><span class="text-xs text-gray-400 block">Dinner</span><span class="font-bold">Omoide Yakitori</span><div class="text-right text-xs text-neon-red">€12.00</div></div>
                             </div>
+                            <div class="border-t border-white/10 pt-2 mt-4 text-right font-bold text-green-400">TOTAL: €20.00</div>
                         </div>
 
-                        <div class="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/5 transition group relative">
-                            <div class="col-span-5 pl-4 flex items-center gap-3 text-white">
-                                <i class="fa-solid fa-bed text-neon-blue w-6"></i>
-                                <span class="group-hover:text-neon-blue transition">Accommodation (Capsule)</span>
+                        <div class="reveal-up stagger-2 bg-black/70 border border-white/20 p-5 rounded-xl hover:border-neon-blue transition backdrop-blur-md flex flex-col h-full card-hover">
+                            <div class="border-b border-white/10 pb-2 mb-4 flex justify-between items-center">
+                                <h3 class="text-xl font-bold text-neon-blue">DAY 02</h3>
+                                <span class="text-xs text-gray-500">ASAKUSA</span>
                             </div>
-                            <div class="col-span-3 text-right font-bold text-lg text-white">128.00</div>
-                            <div class="col-span-4 hidden md:flex items-center gap-3 pl-4">
-                                <div class="text-gray-400 w-12 text-right">6.4%</div>
-                                <div class="flex-grow bg-gray-800 h-2 rounded-full overflow-hidden border border-gray-700">
-                                    <div class="bg-neon-blue h-full w-[6.4%]"></div>
-                                </div>
+                            <div class="space-y-4 flex-grow">
+                                <div><span class="text-xs text-gray-400 block">Breakfast</span><span class="font-bold">Melonpan & Tea</span><div class="text-right text-xs text-neon-red">€4.00</div></div>
+                                <div><span class="text-xs text-gray-400 block">Lunch</span><span class="font-bold">Standing Soba</span><div class="text-right text-xs text-neon-red">€5.00</div></div>
+                                <div><span class="text-xs text-gray-400 block">Dinner</span><span class="font-bold">Tenya Tempura</span><div class="text-right text-xs text-neon-red">€11.00</div></div>
                             </div>
+                            <div class="border-t border-white/10 pt-2 mt-4 text-right font-bold text-green-400">TOTAL: €20.00</div>
                         </div>
 
-                         <div class="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/5 transition group relative">
-                            <div class="col-span-5 pl-4 flex items-center gap-3 text-white">
-                                <i class="fa-solid fa-utensils text-neon-blue w-6"></i>
-                                <span class="group-hover:text-neon-blue transition">Food & Drinks</span>
+                        <div class="reveal-up stagger-3 bg-black/70 border border-white/20 p-5 rounded-xl hover:border-neon-blue transition backdrop-blur-md flex flex-col h-full card-hover">
+                            <div class="border-b border-white/10 pb-2 mb-4 flex justify-between items-center">
+                                <h3 class="text-xl font-bold text-neon-blue">DAY 03</h3>
+                                <span class="text-xs text-gray-500">SHIBUYA</span>
                             </div>
-                            <div class="col-span-3 text-right font-bold text-lg text-white">80.00</div>
-                            <div class="col-span-4 hidden md:flex items-center gap-3 pl-4">
-                                <div class="text-gray-400 w-12 text-right">4.0%</div>
-                                <div class="flex-grow bg-gray-800 h-2 rounded-full overflow-hidden border border-gray-700">
-                                    <div class="bg-neon-blue h-full w-[4.0%]"></div>
-                                </div>
+                            <div class="space-y-4 flex-grow">
+                                <div><span class="text-xs text-gray-400 block">Breakfast</span><span class="font-bold">Egg Sandwich</span><div class="text-right text-xs text-neon-red">€3.00</div></div>
+                                <div><span class="text-xs text-gray-400 block">Lunch</span><span class="font-bold">Gyoza Set Meal</span><div class="text-right text-xs text-neon-red">€6.00</div></div>
+                                <div><span class="text-xs text-gray-400 block">Dinner</span><span class="font-bold">Kura Sushi</span><div class="text-right text-xs text-neon-red">€11.00</div></div>
                             </div>
+                            <div class="border-t border-white/10 pt-2 mt-4 text-right font-bold text-green-400">TOTAL: €20.00</div>
                         </div>
 
-                         <div class="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/5 transition group relative">
-                            <div class="col-span-5 pl-4 flex items-center gap-3 text-white">
-                                <i class="fa-solid fa-train-subway text-neon-blue w-6"></i>
-                                <span class="group-hover:text-neon-blue transition">Transport in City</span>
+                        <div class="reveal-up stagger-4 bg-black/70 border border-white/20 p-5 rounded-xl hover:border-neon-blue transition backdrop-blur-md flex flex-col h-full card-hover">
+                            <div class="border-b border-white/10 pb-2 mb-4 flex justify-between items-center">
+                                <h3 class="text-xl font-bold text-neon-blue">DAY 04</h3>
+                                <span class="text-xs text-gray-500">AKIHABARA</span>
                             </div>
-                            <div class="col-span-3 text-right font-bold text-lg text-white">40.00</div>
-                            <div class="col-span-4 hidden md:flex items-center gap-3 pl-4">
-                                <div class="text-gray-400 w-12 text-right">2.0%</div>
-                                <div class="flex-grow bg-gray-800 h-2 rounded-full overflow-hidden border border-gray-700">
-                                    <div class="bg-neon-blue h-full w-[2.0%]"></div>
-                                </div>
+                            <div class="space-y-4 flex-grow">
+                                <div><span class="text-xs text-gray-400 block">Breakfast</span><span class="font-bold">Energy Jelly</span><div class="text-right text-xs text-neon-red">€4.00</div></div>
+                                <div><span class="text-xs text-gray-400 block">Lunch</span><span class="font-bold">Go Go Curry</span><div class="text-right text-xs text-neon-red">€6.00</div></div>
+                                <div><span class="text-xs text-gray-400 block">Dinner</span><span class="font-bold">Tonkatsu Wako</span><div class="text-right text-xs text-neon-red">€10.00</div></div>
                             </div>
-                        </div>
-
-                        <div class="grid grid-cols-12 gap-4 p-4 items-center bg-neon-red/10 hover:bg-neon-red/20 transition group relative border-t border-b border-neon-red/30">
-                            <div class="col-span-5 pl-4 flex items-center gap-3 text-white">
-                                <i class="fa-solid fa-gift text-neon-red w-6 animate-pulse"></i>
-                                <span class="font-bold text-red-100 group-hover:text-white transition">Souvenirs / Misc</span>
-                            </div>
-                            <div class="col-span-3 text-right font-bold text-xl text-neon-red text-shadow-[0_0_10px_#ff004c]">580.00</div>
-                            <div class="col-span-4 hidden md:flex items-center gap-3 pl-4">
-                                <div class="text-red-300 w-12 text-right">29.0%</div>
-                                <div class="flex-grow bg-gray-800 h-2 rounded-full overflow-hidden border border-gray-700">
-                                    <div class="bg-neon-red h-full w-[29.0%] shadow-[0_0_10px_#ff004c]"></div>
-                                </div>
-                            </div>
-                             <div class="absolute left-0 top-0 h-full w-1 bg-neon-red shadow-[0_0_15px_#ff004c]"></div>
-                        </div>
-
-                    </div>
-
-                    <div class="bg-black p-6 border-t border-neon-blue/50 flex justify-between items-center relative overflow-hidden">
-                        <div class="absolute inset-0 bg-neon-blue/5"></div>
-                        <div class="relative z-10">
-                            <div class="text-gray-400 font-mono text-xs uppercase tracking-widest mb-1">Total Confirmed Expenditure</div>
-                            <div class="text-xs text-neon-blue/70">All systems nominal.</div>
-                        </div>
-                        <div class="relative z-10 text-5xl font-mono font-bold text-white drop-shadow-[0_0_15px_rgba(0,240,255,0.8)]">
-                            €2,000.00
+                            <div class="border-t border-white/10 pt-2 mt-4 text-right font-bold text-green-400">TOTAL: €20.00</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="slide">
-        <div class="bg-wrapper">
-            <div class="bg-img" style="background-image: url('last.png')"></div>
+        <!-- Slide 6: Food Gallery -->
+<div class="slide">
+
+  <div class="bg-wrapper">
+    <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=2187&auto=format&fit=crop'); opacity: 0.3;"></div>
+  </div>
+
+  <div class="overlay" style="background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.95));"></div>
+
+  <div class="content">
+    <div class="w-full max-w-7xl mx-auto">
+      <div class="text-center mb-12 reveal-up">
+        <div class="flex items-center justify-center gap-4 mb-6">
+          <div class="h-[1px] w-16 bg-neon-red"></div>
+          <i class="fa-solid fa-utensils text-4xl text-neon-red"></i>
+          <div class="h-[1px] w-16 bg-neon-red"></div>
         </div>
-        <div class="overlay"></div>
-        
-        <div class="content text-center">
-            <div class="max-w-2xl reveal-up">
-                <i class="fa-solid fa-check-circle text-6xl text-green-500 mb-6 drop-shadow-lg"></i>
-                <h2 class="text-4xl font-bold mb-6 text-shadow-lg">Mission Accomplished</h2>
-                <p class="text-xl text-gray-100 leading-relaxed mb-10 drop-shadow-md">
-                    "We proved that experiencing the complexity of Tokyo doesn't require infinite resources—just precise engineering and strategic planning."
-                </p>
-                <button onclick="current=0; update()" class="px-8 py-4 bg-white text-black font-bold rounded hover:bg-gray-200 transition shadow-lg">
-                    <i class="fa-solid fa-rotate-right mr-2"></i> Restart Briefing
-                </button>
+        <h2 class="text-6xl font-bold text-white mb-4 drop-shadow-2xl">Food Gallery</h2>
+        <p class="text-xl text-gray-300 font-mono">The Dishes We Experienced</p>
+      </div>
+
+      <div class="food-grid">
+
+        <div class="food-card reveal-up stagger-1 border border-white/20 hover:border-neon-red transition-all duration-300">
+          <img src="https://images.pexels.com/photos/31317043/pexels-photo-31317043.jpeg" alt="Onigiri">
+          <div class="food-card-overlay">
+            <h3 class="text-2xl font-bold text-white mb-2">🍙 Onigiri</h3>
+            <p class="text-gray-300 text-sm">Rice balls - Perfect breakfast choice</p>
+          </div>
+        </div>
+
+        <div class="food-card reveal-up stagger-2 border border-white/20 hover:border-neon-red transition-all duration-300">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Beef_Bowl%2C_Gy%C5%ABdon.jpg" alt="Gyudon">
+          <div class="food-card-overlay">
+            <h3 class="text-2xl font-bold text-white mb-2">🍚 Matsuya Beef Bowl</h3>
+            <p class="text-gray-300 text-sm">Classic gyudon - Affordable & filling</p>
+          </div>
+        </div>
+
+        <div class="food-card reveal-up stagger-3 border border-white/20 hover:border-neon-red transition-all duration-300">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Yakitori_018.jpg" alt="Yakitori">
+          <div class="food-card-overlay">
+            <h3 class="text-2xl font-bold text-white mb-2">🍢 Yakitori</h3>
+            <p class="text-gray-300 text-sm">Grilled skewers in Omoide Yokocho</p>
+          </div>
+        </div>
+
+        <div class="food-card reveal-up stagger-1 border border-white/20 hover:border-neon-red transition-all duration-300">
+          <img src="https://images.pexels.com/photos/2098135/pexels-photo-2098135.jpeg" alt="Soba">
+          <div class="food-card-overlay">
+            <h3 class="text-2xl font-bold text-white mb-2">🍜 Standing Soba</h3>
+            <p class="text-gray-300 text-sm">Quick buckwheat noodles at stations</p>
+          </div>
+        </div>
+
+        <div class="food-card reveal-up stagger-2 border border-white/20 hover:border-neon-red transition-all duration-300">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Tempura.JPG" alt="Tempura">
+          <div class="food-card-overlay">
+            <h3 class="text-2xl font-bold text-white mb-2">🍤 Tenya Tempura</h3>
+            <p class="text-gray-300 text-sm">Crispy fried seafood & vegetables</p>
+          </div>
+        </div>
+
+        <div class="food-card reveal-up stagger-3 border border-white/20 hover:border-neon-red transition-all duration-300">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Gyoza_%288664264357%29.jpg" alt="Gyoza">
+          <div class="food-card-overlay">
+            <h3 class="text-2xl font-bold text-white mb-2">🥟 Gyoza Set</h3>
+            <p class="text-gray-300 text-sm">Pan-fried dumplings with dipping sauce</p>
+          </div>
+        </div>
+
+        <div class="food-card reveal-up stagger-4 border border-white/20 hover:border-neon-red transition-all duration-300">
+          <img src="https://images.pexels.com/photos/1683545/pexels-photo-1683545.jpeg" alt="Sushi">
+          <div class="food-card-overlay">
+            <h3 class="text-2xl font-bold text-white mb-2">🍣 Kura Sushi</h3>
+            <p class="text-gray-300 text-sm">Conveyor belt sushi experience</p>
+          </div>
+        </div>
+
+        <div class="food-card reveal-up stagger-1 border border-white/20 hover:border-neon-red transition-all duration-300">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/59/Curry_rice_by_Hyougushi_in_Kyoto.jpg" alt="Curry">
+          <div class="food-card-overlay">
+            <h3 class="text-2xl font-bold text-white mb-2">🍛 Go Go Curry</h3>
+            <p class="text-gray-300 text-sm">Hearty Japanese curry rice</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="mt-12 text-center reveal-up">
+        <div class="inline-block bg-black/60 backdrop-blur-xl border border-neon-red/30 px-8 py-4 rounded-full">
+          <p class="text-gray-300 font-mono text-sm">
+            <span class="text-neon-red font-bold">8 different dishes</span> across 4 days • Budget: <span class="text-white font-bold">€80 total</span>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+        <!-- Slide 7: Transport -->
+        <div class="slide">
+            <div class="bg-wrapper">
+                <div class="bg-img" style="background-image: url('transport2.jpg')"></div>
+            </div>
+            <div class="overlay"></div>
+
+            <div class="content">
+                <div class="w-full max-w-5xl flex flex-col md:flex-row gap-16 items-center mx-auto">
+                    <div class="flex-1 slide-in-left">
+                        <h2 class="text-6xl font-bold mb-4 text-neon-blue text-shadow-lg">Moving Around</h2>
+                        <p class="text-sm font-mono text-gray-400 mb-8">SUB-SYSTEM: URBAN MOBILITY MATRIX</p>
+                        <p class="text-xl text-gray-200 leading-relaxed bg-black/40 p-4 rounded border border-white/10">
+                            Navigating the complex transit matrix of Tokyo requires precise route calculation. The subway system is our primary vector.
+                        </p>
+                    </div>
+
+                    <div class="flex-1 w-full slide-in-right bg-black/60 p-8 rounded-2xl border border-white/20 backdrop-blur-md shadow-2xl card-hover">
+                        <div class="flex justify-between items-end mb-6">
+                            <div>
+                                <i class="fa-solid fa-train-subway text-4xl text-neon-blue mb-4"></i>
+                                <h3 class="font-bold text-3xl">Tokyo Metro</h3>
+                            </div>
+                            <span class="font-mono text-5xl text-white font-bold">€40</span>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex justify-between text-sm text-gray-400">
+                                <span>Transit Pass</span>
+                                <span>Pasmo / Suica</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-400">
+                                <span>Coverage</span>
+                                <span>Cross-Ward</span>
+                            </div>
+                            <div class="w-full bg-gray-700 h-4 rounded-full overflow-hidden mt-4">
+                                <div class="bg-neon-blue w-[10%] h-full"></div>
+                            </div>
+                            <div class="text-right text-xs text-neon-blue mt-1">Budget Impact: 2.0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Sightseeing -->
+        <div class="slide">
+            <div class="bg-wrapper">
+                <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=2070&auto=format&fit=crop')"></div>
+            </div>
+            <div class="overlay"></div>
+
+            <div class="content">
+                <div class="w-full max-w-7xl mx-auto">
+                    <div class="flex justify-between items-end mb-12 border-b border-yellow-500/50 pb-4 reveal-up">
+                        <div>
+                            <h2 class="text-5xl font-bold text-white text-shadow-md">Fun & Sightseeing</h2>
+                            <p class="text-sm text-gray-300 font-mono mt-2">DAILY LOG: DAY 01 - 04</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-yellow-400 text-sm font-bold tracking-widest uppercase block">Total Investment</span>
+                            <span class="text-3xl font-mono text-white">€280</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 font-mono text-sm">
+                        <div class="reveal-up stagger-1 bg-black/70 border border-white/20 p-5 rounded-xl hover:border-yellow-500 transition backdrop-blur-md flex flex-col h-full card-hover">
+                            <div class="border-b border-white/10 pb-2 mb-4 flex justify-between items-center">
+                                <h3 class="text-xl font-bold text-white"><i class="fa-solid fa-city text-purple-500 mr-2"></i>DAY 01</h3>
+                                <span class="text-xs text-gray-500">SHINJUKU</span>
+                            </div>
+                            <div class="space-y-3 flex-grow">
+                                <p class="text-gray-300">Arrival & Check-in</p>
+                                <p class="text-gray-300">Neon District Walk</p>
+                                <p class="text-gray-300">Godzilla Head</p>
+                                <p class="text-gray-300">Omoide Yokocho</p>
+                            </div>
+                            <div class="border-t border-white/10 pt-2 mt-4 text-right font-bold text-yellow-400">COST: €70.00</div>
+                        </div>
+
+                        <div class="reveal-up stagger-2 bg-black/70 border border-white/20 p-5 rounded-xl hover:border-yellow-500 transition backdrop-blur-md flex flex-col h-full card-hover">
+                            <div class="border-b border-white/10 pb-2 mb-4 flex justify-between items-center">
+                                <h3 class="text-xl font-bold text-white"><i class="fa-solid fa-torii-gate text-red-500 mr-2"></i>DAY 02</h3>
+                                <span class="text-xs text-gray-500">ASAKUSA</span>
+                            </div>
+                            <div class="space-y-3 flex-grow">
+                                <p class="text-gray-300">Senso-ji Temple</p>
+                                <p class="text-gray-300">Nakamise Street</p>
+                                <p class="text-gray-300">Ueno Park Walk</p>
+                                <p class="text-gray-300">Ameyoko Market</p>
+                            </div>
+                            <div class="border-t border-white/10 pt-2 mt-4 text-right font-bold text-yellow-400">COST: €70.00</div>
+                        </div>
+
+                        <div class="reveal-up stagger-3 bg-black/70 border border-white/20 p-5 rounded-xl hover:border-yellow-500 transition backdrop-blur-md flex flex-col h-full card-hover">
+                            <div class="border-b border-white/10 pb-2 mb-4 flex justify-between items-center">
+                                <h3 class="text-xl font-bold text-white"><i class="fa-solid fa-users text-blue-500 mr-2"></i>DAY 03</h3>
+                                <span class="text-xs text-gray-500">SHIBUYA</span>
+                            </div>
+                            <div class="space-y-3 flex-grow">
+                                <p class="text-gray-300">Scramble Crossing</p>
+                                <p class="text-gray-300">Hachiko Statue</p>
+                                <p class="text-gray-300">Harajuku Stroll</p>
+                                <p class="text-gray-300">Takeshita Street</p>
+                            </div>
+                            <div class="border-t border-white/10 pt-2 mt-4 text-right font-bold text-yellow-400">COST: €70.00</div>
+                        </div>
+
+                        <div class="reveal-up stagger-4 bg-black/70 border border-white/20 p-5 rounded-xl hover:border-yellow-500 transition backdrop-blur-md flex flex-col h-full card-hover">
+                            <div class="border-b border-white/10 pb-2 mb-4 flex justify-between items-center">
+                                <h3 class="text-xl font-bold text-white"><i class="fa-solid fa-gamepad text-yellow-500 mr-2"></i>DAY 04</h3>
+                                <span class="text-xs text-gray-500">AKIHABARA</span>
+                            </div>
+                            <div class="space-y-3 flex-grow">
+                                <p class="text-gray-300">Electric Town</p>
+                                <p class="text-gray-300">Sega/Taito Arcades</p>
+                                <p class="text-gray-300">Radio Kaikan</p>
+                                <p class="text-gray-300">Last Shopping</p>
+                            </div>
+                            <div class="border-t border-white/10 pt-2 mt-4 text-right font-bold text-yellow-400">COST: €70.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>     
+
+<style>
+  /* SÉCURITÉ CSS */
+  .slide { box-sizing: border-box; }
+  .food-grid, .food-card { min-height: 0; }
+
+  /* CORRECTIF : 18vh est le "sweet spot" */
+  /* 18vh x 3 rangées = 54% de l'écran. Le reste est pour le titre. */
+  .food-card img { 
+    display: block; 
+    width: 100%; 
+    height: 100%;       /* Force l'image à remplir la carte */
+    object-fit: cover; 
+    max-height: 25vh;   /* <--- LE CHIFFRE MAGIQUE (18% de l'écran) */
+  }
+
+  /* Force la grille à être compacte */
+  .food-grid {
+    gap: 0.75rem; /* gap-3 équivalent, pour serrer un peu */
+  }
+  .food-card { max-height: 25vh; }
+  /* Sur mobile, on garde petit aussi */
+  @media (max-width: 480px) {
+    .food-card { max-height: 25vh; }
+  }
+</style>
+
+
+
+        <!-- Slide 10: Hot Spring -->
+        <div class="slide">
+            <div class="bg-wrapper">
+                <div class="bg-img" style="background-image: url('https://www.tourdumonde.fr/wordpress/wp-content/uploads/Kusatsu_Onsen.jpg'); opacity: 0.75;"></div>
+            </div>
+            <div class="overlay" style="background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.9));"></div>
+
+            <div class="content">
+                <div class="w-full max-w-4xl reveal-up mx-auto">
+                    <div class="text-center mb-10">
+                        <i class="fa-solid fa-hot-tub-person text-6xl text-cyan-400 mb-6 inline-block drop-shadow-[0_0_20px_rgba(34,211,238,0.8)]"></i>
+                        <h2 class="text-6xl md:text-7xl font-bold text-white mb-4 drop-shadow-2xl">Onsen Experience</h2>
+                        <p class="text-xl text-cyan-300 font-mono">Traditional Japanese Hot Spring</p>
+                    </div>
+
+                    <div class="bg-black/70 backdrop-blur-xl border border-cyan-400/40 p-10 rounded-3xl shadow-2xl card-hover">
+                        <div class="grid md:grid-cols-3 gap-8 mb-8">
+                            <div class="text-center">
+                                <i class="fa-solid fa-location-dot text-3xl text-cyan-400 mb-3"></i>
+                                <p class="text-sm text-gray-400 uppercase tracking-wider mb-1">Location</p>
+                                <p class="text-xl font-bold text-white">Kusatsu</p>
+                            </div>
+                            <div class="text-center">
+                                <i class="fa-solid fa-temperature-high text-3xl text-orange-400 mb-3"></i>
+                                <p class="text-sm text-gray-400 uppercase tracking-wider mb-1">Temperature</p>
+                                <p class="text-xl font-bold text-white">40-45°C</p>
+                            </div>
+                            <div class="text-center">
+                                <i class="fa-solid fa-clock text-3xl text-green-400 mb-3"></i>
+                                <p class="text-sm text-gray-400 uppercase tracking-wider mb-1">Duration</p>
+                                <p class="text-xl font-bold text-white">Half Day</p>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-white/20 pt-6 mb-6">
+                            <p class="text-center text-lg text-gray-200 leading-relaxed">
+                                Immersion in Japan's most famous volcanic hot springs. 
+                                <span class="text-cyan-400 font-bold">Natural mineral-rich waters</span> 
+                                in an authentic mountain setting—experiencing true Japanese wellness culture.
+                            </p>
+                        </div>
+
+                        <div class="flex items-center justify-center gap-2 text-sm bg-yellow-900/30 text-yellow-400 border border-yellow-500/30 px-6 py-3 rounded-full font-mono">
+                            <i class="fa-solid fa-yen-sign"></i>
+                            <span>Transport + Entry Fee: €100</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Souvenirs -->
+        <div class="slide">
+            <div class="bg-wrapper">
+                <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1528164344705-47542687000d?q=80&w=2071&auto=format&fit=crop'); opacity: 0.6;"></div>
+            </div>
+            <div class="overlay" style="background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.9));"></div>
+
+            <div class="content">
+                <div class="w-full max-w-6xl reveal-up mx-auto">
+                    <div class="flex justify-between items-end mb-10 border-b border-yellow-500/30 pb-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-2 h-12 bg-yellow-500 shadow-[0_0_15px_#eab308]"></div>
+                            <div>
+                                <h2 class="text-5xl font-bold text-white">Loot & Logistics</h2>
+                                <p class="text-yellow-500/80 font-mono text-sm tracking-widest mt-1">/// INVENTORY_LOG_V1</p>
+                            </div>
+                        </div>
+                        <div class="text-right hidden md:block">
+                            <span class="text-gray-400 text-xs uppercase">Transaction Status</span>
+                            <div class="text-green-400 font-bold font-mono">COMPLETED</div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="w-full md:w-1/3">
+                            <div class="bg-black/60 backdrop-blur-xl border border-yellow-500/50 p-8 rounded-2xl shadow-lg h-full flex flex-col justify-between relative overflow-hidden card-hover">
+                                <div class="absolute -right-10 -top-10 w-32 h-32 bg-yellow-500/10 rounded-full blur-2xl"></div>
+                                
+                                <div>
+                                    <h3 class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Total Allocation</h3>
+                                    <div class="text-7xl font-mono font-bold text-white mb-2">€200</div>
+                                    <div class="flex items-center gap-2 text-yellow-400 text-sm font-mono mb-6">
+                                        <i class="fa-solid fa-chart-pie"></i> 10% of Total Budget
+                                    </div>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <div class="flex justify-between text-xs text-gray-400 uppercase">
+                                        <span>Resource Usage</span>
+                                        <span>Optimized</span>
+                                    </div>
+                                    <div class="w-full bg-gray-800 h-3 rounded-full overflow-hidden border border-gray-700">
+                                        <div class="bg-yellow-500 h-full w-[10%] shadow-[0_0_10px_#eab308]"></div>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-4 leading-relaxed">
+                                        Strategic allocation for cultural artifacts and obligatory gifts (Omiyage). Focused on quality over quantity.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-full md:w-2/3 grid gap-4">
+                            <div class="group fade-in bg-black/40 border border-white/10 hover:border-red-500 hover:bg-black/60 p-4 rounded-xl transition-all duration-300 flex items-center gap-6 backdrop-blur-sm card-hover">
+                                <div class="w-16 h-16 bg-white/5 rounded-lg flex items-center justify-center text-3xl border border-white/10 group-hover:border-red-500/50 transition shadow-inner">
+                                    👺
+                                </div>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between items-start">
+                                        <h4 class="text-xl font-bold text-white group-hover:text-red-400 transition">Daruma Doll</h4>
+                                        <span class="text-[10px] font-mono bg-red-900/30 text-red-400 border border-red-500/30 px-2 py-1 rounded">ITEM_ACQUIRED</span>
+                                    </div>
+                                    <p class="text-sm text-gray-400 mt-1">Symbol of perseverance. One eye painted to set the goal.</p>
+                                </div>
+                            </div>
+
+                            <div class="group fade-in bg-black/40 border border-white/10 hover:border-yellow-500 hover:bg-black/60 p-4 rounded-xl transition-all duration-300 flex items-center gap-6 backdrop-blur-sm card-hover">
+                                <div class="w-16 h-16 bg-white/5 rounded-lg flex items-center justify-center text-3xl border border-white/10 group-hover:border-yellow-500/50 transition shadow-inner">
+                                    🐱
+                                </div>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between items-start">
+                                        <h4 class="text-xl font-bold text-white group-hover:text-yellow-400 transition">Maneki-neko</h4>
+                                        <span class="text-[10px] font-mono bg-yellow-900/30 text-yellow-400 border border-yellow-500/30 px-2 py-1 rounded">ITEM_ACQUIRED</span>
+                                    </div>
+                                    <p class="text-sm text-gray-400 mt-1">Traditional lucky cat. Ceramic build. Kinetic arm mechanism.</p>
+                                </div>
+                            </div>
+
+                            <div class="group fade-in bg-black/40 border border-white/10 hover:border-purple-500 hover:bg-black/60 p-4 rounded-xl transition-all duration-300 flex items-center gap-6 backdrop-blur-sm card-hover">
+                                <div class="w-16 h-16 bg-white/5 rounded-lg flex items-center justify-center text-3xl border border-white/10 group-hover:border-purple-500/50 transition shadow-inner">
+                                    👘
+                                </div>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between items-start">
+                                        <h4 class="text-xl font-bold text-white group-hover:text-purple-400 transition">Furoshiki & Misc</h4>
+                                        <span class="text-[10px] font-mono bg-purple-900/30 text-purple-400 border border-purple-500/30 px-2 py-1 rounded">ITEM_ACQUIRED</span>
+                                    </div>
+                                    <p class="text-sm text-gray-400 mt-1">Modular wrapping cloth & various cultural items from local markets.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Summary -->
+        <div class="slide">
+            <div class="bg-wrapper">
+                <div class="bg-img" style="background-image: url('summary3.jpg'); opacity: 0.4;"></div>
+            </div>
+            <div class="overlay" style="background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.95));"></div>
+
+            <div class="content">
+                <div class="w-full max-w-5xl reveal-up mx-auto">
+                    <div class="flex flex-col md:flex-row justify-between items-end mb-8 border-b border-neon-blue/30 pb-4">
+                        <div>
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="bg-neon-blue/10 p-2 rounded border border-neon-blue/30">
+                                    <i class="fa-solid fa-file-invoice-dollar text-3xl text-neon-blue"></i>
+                                </div>
+                                <h1 class="text-4xl font-bold text-white tracking-tight text-shadow-[0_0_15px_rgba(0,240,255,0.5)]">Trip Summary</h1>
+                            </div>
+                            <p class="text-neon-blue font-mono text-sm tracking-widest uppercase flex items-center gap-2">
+                                <span class="w-2 h-2 bg-neon-blue rounded-full animate-pulse"></span>
+                                /// FINANCIAL CLOSE-OUT REPORT_FINAL
+                            </p>
+                        </div>
+                        
+                        <div class="mt-6 md:mt-0 bg-black/60 border border-green-500/50 p-4 rounded-lg backdrop-blur-md shadow-[0_0_15px_rgba(34,197,94,0.2)] flex flex-col items-end">
+                            <div class="text-xs uppercase font-bold text-green-400 tracking-wider mb-1">Budget Variance</div>
+                            <div class="text-4xl font-mono font-bold text-green-400 flex items-center text-shadow-[0_0_10px_#22c55e]">
+                                <i class="fa-solid fa-check-circle mr-3 text-2xl"></i>€0.00
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-black/40 backdrop-blur-xl rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+                        <div class="grid grid-cols-12 gap-4 p-4 bg-white/5 text-gray-400 uppercase text-xs font-mono tracking-widest border-b border-white/10">
+                            <div class="col-span-5 pl-4">Category Entity</div>
+                            <div class="col-span-3 text-right">Cost (€)</div>
+                            <div class="col-span-4 hidden md:block pl-4">Impact Allocation</div>
+                        </div>
+
+                        <div class="divide-y divide-white/10 font-mono text-sm">
+                            <div class="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/5 transition group relative">
+                                <div class="col-span-5 pl-4 flex items-center gap-3 text-white">
+                                    <i class="fa-solid fa-plane text-neon-blue w-6"></i>
+                                    <span class="group-hover:text-neon-blue transition">Flight (Shanghai Airlines)</span>
+                                </div>
+                                <div class="col-span-3 text-right font-bold text-lg text-white">1,172.00</div>
+                                <div class="col-span-4 hidden md:flex items-center gap-3 pl-4">
+                                    <div class="text-gray-400 w-12 text-right">58.6%</div>
+                                    <div class="flex-grow bg-gray-800 h-2 rounded-full overflow-hidden border border-gray-700">
+                                        <div class="bg-neon-blue h-full w-[58.6%] shadow-[0_0_8px_#00f0ff]"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/5 transition group relative">
+                                <div class="col-span-5 pl-4 flex items-center gap-3 text-white">
+                                    <i class="fa-solid fa-bed text-neon-blue w-6"></i>
+                                    <span class="group-hover:text-neon-blue transition">Accommodation (Capsule)</span>
+                                </div>
+                                <div class="col-span-3 text-right font-bold text-lg text-white">128.00</div>
+                                <div class="col-span-4 hidden md:flex items-center gap-3 pl-4">
+                                    <div class="text-gray-400 w-12 text-right">6.4%</div>
+                                    <div class="flex-grow bg-gray-800 h-2 rounded-full overflow-hidden border border-gray-700">
+                                        <div class="bg-neon-blue h-full w-[6.4%]"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/5 transition group relative">
+                                <div class="col-span-5 pl-4 flex items-center gap-3 text-white">
+                                    <i class="fa-solid fa-utensils text-neon-blue w-6"></i>
+                                    <span class="group-hover:text-neon-blue transition">Food & Drinks</span>
+                                </div>
+                                <div class="col-span-3 text-right font-bold text-lg text-white">80.00</div>
+                                <div class="col-span-4 hidden md:flex items-center gap-3 pl-4">
+                                    <div class="text-gray-400 w-12 text-right">4.0%</div>
+                                    <div class="flex-grow bg-gray-800 h-2 rounded-full overflow-hidden border border-gray-700">
+                                        <div class="bg-neon-blue h-full w-[4.0%]"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/5 transition group relative">
+                                <div class="col-span-5 pl-4 flex items-center gap-3 text-white">
+                                    <i class="fa-solid fa-train-subway text-neon-blue w-6"></i>
+                                    <span class="group-hover:text-neon-blue transition">Transport in City</span>
+                                </div>
+                                <div class="col-span-3 text-right font-bold text-lg text-white">40.00</div>
+                                <div class="col-span-4 hidden md:flex items-center gap-3 pl-4">
+                                    <div class="text-gray-400 w-12 text-right">2.0%</div>
+                                    <div class="flex-grow bg-gray-800 h-2 rounded-full overflow-hidden border border-gray-700">
+                                        <div class="bg-neon-blue h-full w-[2.0%]"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/5 transition group relative">
+                                <div class="col-span-5 pl-4 flex items-center gap-3 text-white">
+                                    <i class="fa-solid fa-ticket text-neon-blue w-6"></i>
+                                    <span class="group-hover:text-neon-blue transition">Sightseeing & Activities</span>
+                                </div>
+                                <div class="col-span-3 text-right font-bold text-lg text-white">280.00</div>
+                                <div class="col-span-4 hidden md:flex items-center gap-3 pl-4">
+                                    <div class="text-gray-400 w-12 text-right">14.0%</div>
+                                    <div class="flex-grow bg-gray-800 h-2 rounded-full overflow-hidden border border-gray-700">
+                                        <div class="bg-neon-blue h-full w-[14.0%]"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/5 transition group relative">
+                                <div class="col-span-5 pl-4 flex items-center gap-3 text-white">
+                                    <i class="fa-solid fa-hot-tub-person text-cyan-400 w-6"></i>
+                                    <span class="group-hover:text-cyan-400 transition">Onsen Experience</span>
+                                </div>
+                                <div class="col-span-3 text-right font-bold text-lg text-white">100.00</div>
+                                <div class="col-span-4 hidden md:flex items-center gap-3 pl-4">
+                                    <div class="text-gray-400 w-12 text-right">5.0%</div>
+                                    <div class="flex-grow bg-gray-800 h-2 rounded-full overflow-hidden border border-gray-700">
+                                        <div class="bg-cyan-400 h-full w-[5.0%]"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-12 gap-4 p-4 items-center bg-yellow-900/10 hover:bg-yellow-900/20 transition group relative border-t border-b border-yellow-500/30">
+                                <div class="col-span-5 pl-4 flex items-center gap-3 text-white">
+                                    <i class="fa-solid fa-gift text-yellow-500 w-6"></i>
+                                    <span class="font-bold text-yellow-100 group-hover:text-white transition">Souvenirs / Misc</span>
+                                </div>
+                                <div class="col-span-3 text-right font-bold text-xl text-yellow-500 text-shadow-[0_0_10px_#eab308]">200.00</div>
+                                <div class="col-span-4 hidden md:flex items-center gap-3 pl-4">
+                                    <div class="text-yellow-300 w-12 text-right">10.0%</div>
+                                    <div class="flex-grow bg-gray-800 h-2 rounded-full overflow-hidden border border-gray-700">
+                                        <div class="bg-yellow-500 h-full w-[10.0%] shadow-[0_0_10px_#eab308]"></div>
+                                    </div>
+                                </div>
+                                <div class="absolute left-0 top-0 h-full w-1 bg-yellow-500 shadow-[0_0_15px_#eab308]"></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-black p-6 border-t border-neon-blue/50 flex justify-between items-center relative overflow-hidden">
+                            <div class="absolute inset-0 bg-neon-blue/5"></div>
+                            <div class="relative z-10">
+                                <div class="text-gray-400 font-mono text-xs uppercase tracking-widest mb-1">Total Confirmed Expenditure</div>
+                                <div class="text-xs text-neon-blue/70">All systems nominal.</div>
+                            </div>
+                            <div class="relative z-10 text-5xl font-mono font-bold text-white drop-shadow-[0_0_15px_rgba(0,240,255,0.8)]">
+                                €2,000.00
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Conclusion -->
+        <div class="slide">
+            <div class="bg-wrapper">
+                <div class="bg-img" style="background-image: url('last.png')"></div>
+            </div>
+            <div class="overlay"></div>
+            
+            <div class="content text-center">
+                <div class="max-w-2xl reveal-up mx-auto">
+                    <i class="fa-solid fa-check-circle text-6xl text-green-500 mb-6 drop-shadow-lg animate-pulse"></i>
+                    <h2 class="text-4xl font-bold mb-6 text-shadow-lg">Mission Accomplished</h2>
+                    <p class="text-xl text-gray-100 leading-relaxed mb-10 drop-shadow-md">
+                        "We proved that experiencing the complexity of Tokyo doesn't require infinite resources—just precise engineering and strategic planning."
+                    </p>
+                    <button onclick="current=0; update()" class="px-8 py-4 bg-white text-black font-bold rounded hover:bg-gray-200 transition shadow-lg hover:shadow-2xl hover:scale-105 transform duration-300">
+                        <i class="fa-solid fa-rotate-right mr-2"></i> Restart Briefing
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        let current = 0;
-        const slides = document.querySelectorAll('.slide');
-        const progress = document.getElementById('progress');
+<script>
+/*
+  Slide controller amélioré
+  - throttle pour éviter les changements trop rapides
+  - autoplay optionnel (désactivable)
+  - pause on hover / focus
+  - swipe amélioré (touchmove + threshold)
+  - keyboard: flèches, espace (empêche scroll quand approprié)
+  - préchargement des images trouvées dans les slides
+  - gestion robuste des éléments manquants
+*/
 
-        function update() {
-            slides.forEach(s => s.classList.remove('active'));
-            
-            if (current >= slides.length) current = 0;
-            if (current < 0) current = slides.length - 1;
-            
-            slides[current].classList.add('active');
-            progress.style.width = ((current + 1) / slides.length * 100) + '%';
-        }
+(() => {
+  let current = 0;
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const progress = document.getElementById('progress');
 
-        function move(dir) {
-            current += dir;
-            update();
-        }
+  // Config
+  const config = {
+    loop: true,
+    autoplay: false,         // true pour activer l'autoplay
+    autoplayInterval: 6000,  // ms
+    swipeThreshold: 50,      // px
+    transitionLockMs: 450    // lock entre deux déplacements
+  };
 
-        document.addEventListener('keydown', (e) => {
-            if(e.key === 'ArrowRight' || e.key === ' ') move(1);
-            if(e.key === 'ArrowLeft') move(-1);
-        });
+  // State
+  let locked = false;
+  let autoplayTimer = null;
+  let touchStartX = null;
+  let touchCurrentX = null;
 
-        // Init
-        update();
-    </script>
+  if (!slides.length) {
+    console.warn('Slide controller : aucune .slide trouvée.');
+    return;
+  }
+
+  // Utility : safe progress update
+  function setProgress(ratio) {
+    if (!progress) return;
+    const pct = Math.max(0, Math.min(100, ratio * 100));
+    progress.style.width = pct + '%';
+  }
+
+  // Accessibility update (aria-hidden, aria-current, tabindex)
+  function updateA11y() {
+    slides.forEach((s, i) => {
+      if (i === current) {
+        s.classList.add('active');
+        s.setAttribute('aria-hidden', 'false');
+        s.setAttribute('aria-current', 'true');
+        s.setAttribute('tabindex', '0');
+      } else {
+        s.classList.remove('active');
+        s.setAttribute('aria-hidden', 'true');
+        s.removeAttribute('aria-current');
+        s.setAttribute('tabindex', '-1');
+      }
+    });
+    setProgress((current + 1) / slides.length);
+  }
+
+  // Clamp / wrap index
+  function clampIndex(idx) {
+    if (config.loop) {
+      if (idx >= slides.length) return 0;
+      if (idx < 0) return slides.length - 1;
+      return idx;
+    } else {
+      return Math.max(0, Math.min(slides.length - 1, idx));
+    }
+  }
+
+  // Move with locking
+  function move(dirOrIndex, absolute = false) {
+    if (locked) return;
+    locked = true;
+    setTimeout(() => locked = false, config.transitionLockMs);
+
+    const next = absolute ? clampIndex(dirOrIndex) : clampIndex(current + dirOrIndex);
+    if (next === current) {
+      // nothing to do
+      return;
+    }
+    current = next;
+    updateA11y();
+    resetAutoplay();
+  }
+
+  // Public: go to next / prev
+  function next() { move(1); }
+  function prev() { move(-1); }
+  function goTo(index) { move(index, true); }
+
+  // Keyboard handling
+  document.addEventListener('keydown', (e) => {
+    const activeTag = (document.activeElement && document.activeElement.tagName) ? document.activeElement.tagName.toLowerCase() : null;
+    // ignore when typing in input/textarea/select or contenteditable
+    if (activeTag === 'input' || activeTag === 'textarea' || document.activeElement?.isContentEditable) return;
+
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      next();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      prev();
+    } else if (e.key === ' ' || e.key === 'Spacebar') { // space
+      // quand la page a le focus sur un slide, utiliser space pour avancer sans scroller la page
+      const inSlide = document.activeElement && document.activeElement.classList && document.activeElement.classList.contains('slide');
+      if (inSlide) {
+        e.preventDefault();
+        next();
+      }
+    }
+  });
+
+  // Pointer / mouse hover pause
+  slides.forEach(s => {
+    s.addEventListener('mouseenter', pauseAutoplay);
+    s.addEventListener('mouseleave', resumeAutoplay);
+    s.addEventListener('focusin', pauseAutoplay);
+    s.addEventListener('focusout', resumeAutoplay);
+  });
+
+  // Swipe: touchstart, touchmove, touchend (more robust)
+  function onTouchStart(e) {
+    if (!e.changedTouches || !e.changedTouches.length) return;
+    touchStartX = e.changedTouches[0].clientX;
+    touchCurrentX = touchStartX;
+  }
+
+  function onTouchMove(e) {
+    if (!touchStartX) return;
+    touchCurrentX = e.changedTouches[0].clientX;
+  }
+
+  function onTouchEnd(e) {
+    if (!touchStartX || touchCurrentX === null) {
+      touchStartX = touchCurrentX = null;
+      return;
+    }
+    const dx = touchCurrentX - touchStartX;
+    if (dx <= -config.swipeThreshold) {
+      next();
+    } else if (dx >= config.swipeThreshold) {
+      prev();
+    }
+    touchStartX = touchCurrentX = null;
+  }
+
+  // Support mouse drag (optional, good for desktops with trackpad drag)
+  let pointerDown = false;
+  let pointerStartX = null;
+  function onPointerDown(e) {
+    pointerDown = true;
+    pointerStartX = e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX) || null;
+  }
+  function onPointerMove(e) {
+    if (!pointerDown || pointerStartX === null) return;
+    // not tracking continuous movement here (we only care on up)
+  }
+  function onPointerUp(e) {
+    if (!pointerDown) return;
+    pointerDown = false;
+    const clientX = e.clientX || (e.changedTouches && e.changedTouches[0] && e.changedTouches[0].clientX) || null;
+    if (clientX === null || pointerStartX === null) return;
+    const dx = clientX - pointerStartX;
+    if (dx <= -config.swipeThreshold) next();
+    if (dx >= config.swipeThreshold) prev();
+    pointerStartX = null;
+  }
+
+  // Autoplay control
+  function startAutoplay() {
+    if (!config.autoplay) return;
+    stopAutoplay();
+    autoplayTimer = setInterval(() => {
+      next();
+    }, config.autoplayInterval);
+  }
+  function stopAutoplay() {
+    if (autoplayTimer) {
+      clearInterval(autoplayTimer);
+      autoplayTimer = null;
+    }
+  }
+  function pauseAutoplay() {
+    stopAutoplay();
+  }
+  function resumeAutoplay() {
+    if (config.autoplay) startAutoplay();
+  }
+  function resetAutoplay() {
+    if (!config.autoplay) return;
+    stopAutoplay();
+    // restart after a short delay so user has time
+    autoplayTimer = setTimeout(startAutoplay, 1000);
+  }
+
+  // Preload images: takes images found inside slides + additional list if provided
+  function preloadImages(extraUrls = []) {
+    const urls = new Set(extraUrls);
+    slides.forEach(s => {
+      // find <img> tags in slide
+      const imgs = Array.from(s.querySelectorAll('img[src]'));
+      imgs.forEach(img => {
+        if (img.src) urls.add(img.src);
+        // also if data-src pattern exists
+        if (img.dataset && img.dataset.src) urls.add(img.dataset.src);
+      });
+      // background-image inline style?
+      const style = s.getAttribute('style') || '';
+      const bgMatch = style.match(/url\((['"]?)(.*?)\1\)/);
+      if (bgMatch && bgMatch[2]) urls.add(bgMatch[2]);
+    });
+
+    urls.forEach(u => {
+      if (!u) return;
+      const image = new Image();
+      image.onload = () => { /* noop - helps browser cache */ };
+      image.onerror = () => { /* noop - handled by img onerror fallback if present */ };
+      image.src = u;
+    });
+  }
+
+  // Initial update
+  function init() {
+    // set some ARIA defaults
+    slides.forEach((s, i) => {
+      s.setAttribute('role', 'group');
+      s.setAttribute('aria-roledescription', 'slide');
+      s.setAttribute('aria-label', `Slide ${i + 1} of ${slides.length}`);
+    });
+
+    // Make sure progress bar reflects initial state
+    updateA11y();
+
+    // Attach touch/pointer listeners on the slide container (document or a parent)
+    // We'll attach to the document so it works even if user touches outside exact slide bounds
+    document.addEventListener('touchstart', onTouchStart, { passive: true });
+    document.addEventListener('touchmove', onTouchMove, { passive: true });
+    document.addEventListener('touchend', onTouchEnd, { passive: true });
+
+    // Pointer / mouse drag support
+    document.addEventListener('pointerdown', onPointerDown, { passive: true });
+    document.addEventListener('pointermove', onPointerMove, { passive: true });
+    document.addEventListener('pointerup', onPointerUp, { passive: true });
+    document.addEventListener('pointercancel', onPointerUp, { passive: true });
+
+    // Prevent accidental navigation with space when a slide has focus
+    window.addEventListener('keydown', (e) => {
+      if ((e.key === ' ' || e.key === 'Spacebar') && document.activeElement && document.activeElement.classList && document.activeElement.classList.contains('slide')) {
+        e.preventDefault();
+      }
+    });
+
+    // Start autoplay if configured
+    startAutoplay();
+
+    // Preload images found in slides (and a few extras if you want)
+    // Optionnel : ajouter d'autres URLs en argument
+    preloadImages([
+      'garde1.jpg',
+      'capsule1.jpg',
+      'cuisine4.jpg',
+      'transport2.jpg',
+      'summary3.jpg',
+      'last.png',
+      'https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=2070&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1528164344705-47542687000d?q=80&w=2071&auto=format&fit=crop',
+      'https://www.tourdumonde.fr/wordpress/wp-content/uploads/Kusatsu_Onsen.jpg'
+    ]);
+  }
+
+  // Expose some control globally (facultatif)
+  window.slideController = {
+    next,
+    prev,
+    goTo,
+    startAutoplay: () => { config.autoplay = true; startAutoplay(); },
+    stopAutoplay: () => { config.autoplay = false; stopAutoplay(); },
+    getCurrent: () => current,
+    setConfig: (cfg) => Object.assign(config, cfg)
+  };
+
+  // init after load to ensure .slide are present and styles applied
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(init, 10);
+  } else {
+    window.addEventListener('DOMContentLoaded', init);
+  }
+
+  // beforeunload protection (keep existing behaviour but slightly stricter)
+  window.addEventListener('beforeunload', (e) => {
+    // si on est pas au premier slide et pas au dernier (ou si loop true: si index != 0)
+    const atStart = (current === 0);
+    const atEnd = (current === slides.length - 1);
+    if (!atStart && (!config.loop && !atEnd || config.loop)) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+})();
+</script>
+
 </body>
-
 </html>
